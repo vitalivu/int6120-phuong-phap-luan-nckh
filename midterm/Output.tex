@@ -1,12 +1,13 @@
 \documentclass[]{iosart2c}
-\usepackage[T1]{fontenc}
+% \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{times,mathtools, amssymb, amsfonts, amsmath, fancyhdr, graphics, dcolumn, natbib}
+\usepackage[a4paper,width=160mm,top=20mm,bottom=15mm,right=0mm]{geometry}
+\usepackage{times,mathtools, amssymb, amsfonts, amsmath, fancyhdr, graphics, dcolumn, natbib, graphicx}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage[switch]{lineno}
 \usepackage[none]{hyphenat}
-
+\usepackage{microtype}
 % \usepackage[style=apa,backend=biber,bibencoding=latin1]{biblatex}
 % \addbibresource{output.bib}
 
@@ -15,8 +16,17 @@
 
 \linenumbers
 \renewcommand{\baselinestretch}{1.1}
-\setlength{\parskip}{.75em}
+\setlength{\parskip}{.5em}
 
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead{}
+\fancyhead[RO,LE]{Thesis Title}
+\fancyfoot{}
+\fancyfoot[LE,RO]{\thepage}
+\fancyfoot[LO,CE]{Chapter \thechapter}
+\fancyfoot[CO,RE]{Author Name}
 
 \def\QEDmark{\ensuremath{\square}}
 \def\proof{
@@ -24,23 +34,25 @@
   \paragraph{\textbf{Proof}.}}
 \def\endproof{\hfill\QEDmark}
 
+\graphicspath{ {./images/} }
+
+\bibliographystyle{acl_natbib}
+
 \begin{document}
 
-  \begin{frontmatter}              % The preamble begins here.
-
-%\pretitle{Pretitle}
+  \begin{frontmatter}
 
     \title{A distance-based approach for merging\\
     probabilistic knowledge bases}
 
     \runningtitle{A distance-based approach for merging probabilistic knowledge bases}
-%\subtitle{Subtitle}
 
     \author[A,C]{\fnms{Van Tham} \snm{Nguyen}},
     \author[B,D]{\fnms{Ngoc Thanh} \snm{Nguyen}}
     and
     \author[A]{\fnms{Trong Hieu} \snm{Tran}%
-    \thanks{Corresponding author. Trong Hieu Tran, Faculty of Information Technology, Nguyen Tat Thanh University, Ho Chi Minh city, Vietnam. hieutt@vnu.edu.vn}}
+    \thanks{Corresponding author. Trong Hieu Tran, Faculty of Information Technology, Nguyen Tat Thanh University,
+      Ho Chi Minh city, Vietnam. hieutt@vnu.edu.vn}}
 
     \runningauthor{V.T. Nguyen et al.}
 
@@ -50,7 +62,18 @@
     \address[D]{Faculty of Information Technology, Nguyen Tat Thanh University, Ho Chi Minh city, Vietnam}
 
     \begin{abstract}
-      In the stages of development of probabilistic expert systems, knowledge merging is a major concern. To deal with knowledge merging problems, several approaches have been put forward. However, in the proposed models, each original probabilistic knowledge base (PKB) is represented by a set of probabilistic functions fulfilling such knowledge base. The drawbacks of the solutions are that the output of model is also a set of probabilistic functions satisfying the resulting PKB and there is no algorithm for implementing the merging process of PKBs in which each of them consists of probabilistic constraints. In this paper, distance-based approach is utilized to propose a new method of merging PKBs to ensure that both the input and output of methods are represented by sets of probabilistic constraints. To this aim, the relationship between the probability rules and the probabilistic constraints, and the several transformation methods for the representation of the original PKB are presented, a set of merging operators (MOs) is proposed, and several desirable logical properties are investigated and discussed. Several algorithms for merging PKBs are presented and the computational complexities of these algorithms are also analyzed and evaluated
+      In the stages of development of probabilistic expert systems, knowledge merging is a major concern. To deal with
+      knowledge merging problems, several approaches have been put forward. However, in the proposed models, each
+      original probabilistic knowledge base (PKB) is represented by a set of probabilistic functions fulfilling such
+      knowledge base. The drawbacks of the solutions are that the output of model is also a set of probabilistic
+      functions satisfying the resulting PKB and there is no algorithm for implementing the merging process of PKBs in
+      which each of them consists of probabilistic constraints. In this paper, distance-based approach is utilized to
+      propose a new method of merging PKBs to ensure that both the input and output of methods are represented by sets
+      of probabilistic constraints. To this aim, the relationship between the probability rules and the probabilistic
+      constraints, and the several transformation methods for the representation of the original PKB are presented, a
+      set of merging operators (MOs) is proposed, and several desirable logical properties are investigated and
+      discussed. Several algorithms for merging PKBs are presented and the computational complexities of these
+      algorithms are also analyzed and evaluated
 
     \end{abstract}
 
@@ -65,32 +88,96 @@
 
 
   \section{Introduction}
-  Improving appropriate methods to build and maintain the action of knowledge-based systems is very necessary. In security systems, advanced methods of symbolic knowledge representation are used to integrate different, distributed source of information and in this way to make a system be flexible and more effective [1]. It is necessary to transform information stored in knowledge bases when two computer systems need to be integrated or when they exchange content of their knowledge bases [2]. In order to ensure that systems could interact with each other, the knowledge bases originating from these systems have to be consistent. Knowledge merging could be understood as a process of creating a consistent knowledge from a set of knowledge bases deriving from different systems [3]. Knowledge merging is an important problem and its applications are many and diverse. The process of merging could require that knowledge bases should change to ensure the consistency of the merged knowledge base. Therefore, it is a difficult problem and considering these changes is very essential. Knowledge merging could be observed in two respects: Merging knowledge bases which are not similar and merging a set of different representations for same knowledge base but different in representing degree [3]. Therefore, the first task in the knowledge merging process is to solve the inconsistency in knowledge bases. A data filling approach for incomplete set in which missing data is filled in terms of the probability of objects appearing in the mapping sets of parameters could find in [4]. A class of basic inconsistency measures for probabilistic framework has been introduced in [5, 6]. In a probabilistic environment, some strategies have been developed to deal with the inconsistency of a knowledge base. The method of modification of probabilities is one of the most common approaches. This method has been applied in [7–10].
+  Improving appropriate methods to build and maintain the action of knowledge-based systems is very necessary. In
+  security systems, advanced methods of symbolic knowledge representation are used to integrate different, distributed
+  source of information and in this way to make a system be flexible and more effective \cite{1}. It is necessary to
+  transform information stored in knowledge bases when two computer systems need to be integrated or when they exchange
+  content of their knowledge bases \cite{2}. In order to ensure that systems could interact with each other, the
+  knowledge bases originating from these systems have to be consistent. Knowledge merging could be understood as a
+  process of creating a consistent knowledge from a set of knowledge bases deriving from different systems \cite{3}.
+  Knowledge merging is an important problem and its applications are many and diverse. The process of merging could
+  require that knowledge bases should change to ensure the consistency of the merged knowledge base. Therefore, it is
+  a difficult problem and considering these changes is very essential. Knowledge merging could be observed in two
+  respects: Merging knowledge bases which are not similar and merging a set of different representations for same
+  knowledge base but different in representing degree \cite{3}. Therefore, the first task in the knowledge merging
+  process is to solve the inconsistency in knowledge bases. A data filling approach for incomplete set in which missing
+  data is filled in terms of the probability of objects appearing in the mapping sets of parameters could find in
+  \cite{4}. A class of basic inconsistency measures for probabilistic framework has been introduced in \cite{5}
+  \cite{6}. In a probabilistic environment, some strategies have been developed to deal with the inconsistency of a
+  knowledge base. The method of modification of probabilities is one of the most common approaches. This method has
+  been applied in \cite{7} \cite{8} \cite{9} \cite{10}.
 
-  A general model of knowledge merging problem referring to its inconsistency in distribution aspect was introduced in [3]. In this work, the author worked out and discussed the knowledge merging problem, postulates for knowledge merging and algorithms for this process. In a logic environment, some approaches were proposed to merge propositional knowledge [11–13]. The main idea of those strategies is often to build a family of MOs: Model-based operators and Formula-based MOs [11], DA2 MOs [12], MOs (Quota, Gmin) [13]. MOs in [11, 12] are built in the propositional logic framework and they require all the knowledge bases have the same importance, priority, or easibility. Moreover, model-based operators cannot take into account inconsistent knowledge bases, but in some cases the information from these bases can be useful while the drawback of formula-based MOs is that the sources of information could be lost in the merging process.
+  A general model of knowledge merging problem referring to its inconsistency in distribution aspect was introduced in
+  \cite{3}. In this work, the author worked out and discussed the knowledge merging problem, postulates for knowledge
+  merging and algorithms for this process. In a logic environment, some approaches were proposed to merge propositional
+  knowledge \cite{11} \cite{12} \cite{13}. The main idea of those strategies is often to build a family of MOs:
+  Model-based operators and Formula-based MOs \cite{11}, DA2 MOs \cite{12}, MOs (Quota, Gmin) \cite{13}. MOs in
+  \cite{11}, \cite{12} are built in the propositional logic framework and they require all the knowledge bases have the
+  same importance, priority, or easibility. Moreover, model-based operators cannot take into account inconsistent
+  knowledge bases, but in some cases the information from these bases can be useful while the drawback of formula-based
+  MOs is that the sources of information could be lost in the merging process.
 
-  It can be necessary to merge knowledge bases with more structure than the one of propositional logic. In this case weighted approaches are the best way. This is usually represented using possibilistic logic. For possibilistic knowledge merging issue, there are many different methods [14–16] proposed to solve. Merging process of these methods includes two stages: the separation and the combination. In the first step, each knowledge base is divided into two sub-bases and then the combination step employs different operators to combine different classes of sub-bases. However, there is no possibilistic merging operator satisfying all the postulates for merging possibilistic knowledge bases [16]. Another method proposed in [17] state that keeping weighted information after merging is not always necessary. The models of this work are models of the formula representing the integrity constraints that are maximal with respect to the lexicographic ordering. However, the drawback of the solutions is that the work does not present a representation theorem for the generalized postulates.Moreover, the merging results are usually consistent when using the propositional MOs, while the merging results may be inconsistent if using the possibilistic MOs.
+  It can be necessary to merge knowledge bases with more structure than the one of propositional logic. In this case
+  weighted approaches are the best way. This is usually represented using possibilistic logic. For possibilistic
+  knowledge merging issue, there are many different methods [14–16] proposed to solve. Merging process of these
+  methods includes two stages: the separation and the combination. In the first step, each knowledge base is divided
+  into two sub-bases and then the combination step employs different operators to combine different classes of
+  sub-bases. However, there is no possibilistic merging operator satisfying all the postulates for merging possibilistic
+  knowledge bases \cite{16}. Another method proposed in \cite{17} state that keeping weighted information after merging
+  is not always necessary. The models of this work are models of the formula representing the integrity constraints
+  that are maximal with respect to the lexicographic ordering. However, the drawback of the solutions is that the work
+  does not present a representation theorem for the generalized postulates.Moreover, the merging results are usually
+  consistent when using the propositional MOs, while the merging results may be inconsistent if using the possibilistic
+  MOs.
 
-  Within the probabilistic framework, knowledge merging is understood as a process of building a joint probability distribution from an input set of low-dimensional distributions [18–20]. The main purpose of this work is to create a unifying framework for operations with probability distributions that would be used for description of iterative procedures for proposing solving methods. However, the convergence of those algorithms in [18–20] have not been carefully considered. Another approach is to build MOs based on convex Bregman divergences. A family of probabilistic MOs was first introduced in [21] and they were further studied in [22, 23]. These operators were discussed, evaluated, and compared to each other in detail in [23]. However, the main limitation of approaches proposed in [21–23] is that it only works with PKBs represented by probability functions.
+  Within the probabilistic framework, knowledge merging is understood as a process of building a joint probability
+  distribution from an input set of low-dimensional distributions [18–20]. The main purpose of this work is to create
+  a unifying framework for operations with probability distributions that would be used for description of iterative
+  procedures for proposing solving methods. However, the convergence of those algorithms in \cite{18} \cite{19} \cite{20} have not been
+  carefully considered. Another approach is to build MOs based on convex Bregman divergences. A family of probabilistic
+  MOs was first introduced in \cite{21} and they were further studied in \cite{22} \cite{23}. These operators were discussed,
+  evaluated, and compared to each other in detail in \cite{23}. However, the main limitation of approaches proposed
+  in \cite{21} \cite{22} \cite{23} is that it only works with PKBs represented by probability functions.
 
-  In the previous work [24], the representation of PKB by probability functions and divergence distance functions is taken into account. A deeply survey is first made on how to compute a set of probability functions satisfying PKB, then the way these functions could be employed to merge probabilistic knowledge bases by proposing two MOs based on divergence distance functions has also been shown. Satisfied probabilistic functions correspond to convex optimization problems or linear programs while all these operators correspond to convex optimization problems. However, the propositions and examples are given but there is no proofs nor algorithms to implement the merging process. Moreover, the output of the proposed model is only the probabilistic functions representing newly merged knowledge base being not represented in the same form as the original knowledge bases.
+  In the previous work \cite{24}, the representation of PKB by probability functions and divergence distance functions
+  is taken into account. A deeply survey is first made on how to compute a set of probability functions satisfying PKB,
+  then the way these functions could be employed to merge probabilistic knowledge bases by proposing two MOs based on
+  divergence distance functions has also been shown. Satisfied probabilistic functions correspond to convex optimization
+  problems or linear programs while all these operators correspond to convex optimization problems. However, the
+  propositions and examples are given but there is no proofs nor algorithms to implement the merging process. Moreover,
+  the output of the proposed model is only the probabilistic functions representing newly merged knowledge base being
+  not represented in the same form as the original knowledge bases.
 
-  This paper is extended from our conference paper [24]. It introduces in more details how to calculate a set of probability functions satisfying a PKB, probability merging vector as well as the new probability of constraints in merged PKB. Comparing with the conference paper our contributions are based on the fact that propositions for calculating such values are proved by pointing that there always exists optimal solutions [25] and the output of merged PKB is similar to original PKBs in representation. Besides, main algorithms using to merge PKBs have been put forward by obeying probability rules and condition property of MOs. In addition to pointing out that proposed operators fulfill several desirable properties, two new operators is investigated more and unproven remaining statements have also been made. Finally, a simple but explanatory example to illustrate, analyze and evaluate computational complexity of proposed algorithms is presented.
+  This paper is extended from our conference paper \cite{24}. It introduces in more details how to calculate a set of
+  probability functions satisfying a PKB, probability merging vector as well as the new probability of constraints in
+  merged PKB. Comparing with the conference paper our contributions are based on the fact that propositions for
+  calculating such values are proved by pointing that there always exists optimal solutions \cite{25} and the output of
+  merged PKB is similar to original PKBs in representation. Besides, main algorithms using to merge PKBs have been put
+  forward by obeying probability rules and condition property of MOs. In addition to pointing out that proposed
+  operators fulfill several desirable properties, two new operators is investigated more and unproven remaining
+  statements have also been made. Finally, a simple but explanatory example to illustrate, analyze and evaluate
+  computational complexity of proposed algorithms is presented.
 
-  The rest of this paper is organized as follows. The second section presents the related work on approaches for merging PKBs. Some basic notions about probability function, probabilistic constraint, probability rules, the representation of knowledge bases in a probabilistic framework, and a PKB profile for such bases are presented in the third section. The subsequent section gives distance-based probabilistic MOs. The way to determine probabilistic merging vector as well as the desirable logical properties for MOs are also drawn and discussed in this section. Algorithms for merging PKBs as well as the analysis and evaluation of these algorithms are presented in the next sections. The final section will conclude the main results that have been investigated and give some future works.
+  The rest of this paper is organized as follows. The second section presents the related work on approaches for
+  merging PKBs. Some basic notions about probability function, probabilistic constraint, probability rules, the
+  representation of knowledge bases in a probabilistic framework, and a PKB profile for such bases are presented in
+  the third section. The subsequent section gives distance-based probabilistic MOs. The way to determine probabilistic
+  merging vector as well as the desirable logical properties for MOs are also drawn and discussed in this section.
+  Algorithms for merging PKBs as well as the analysis and evaluation of these algorithms are presented in the next
+  sections. The final section will conclude the main results that have been investigated and give some future works.
 
 
   \section{Related work}
 
-  The problem of merging PKBs has been studied for a long time and gets a lot of attention in recent years. The idea of probabilistic merging has been introduced and discussed in detail by Vomlel \citep{18} . This work proposed a design and characterization of methods applicable to the merging process of knowledge bases represented by a set of probability distributions. Vomlel used the means of the Iterative Proportional Fitting Procedure (IPFP) to build a joint probability distribution from an input set of low-dimensional distributions. In the case of inconsistent input set, five iterative methods were proposed, namely: CC LCC, AA, GA, and GEM. In the case of consistent input set, iterative proportional fitting procedure have the best convergence rate of five iterative methods for inconsistent input set. However, several properties of methods were not proven and not achieved in this general case due to problems with probability distributions containing zeroes. Vomlel continued proposing another method that extends IPFP to deal with inconsistent constraints, named GEMA [19]. It generalizes the concept of expectation maximization. The time performance of GEMA was extremely sensitive to both the initial knowledge bases and the constraints. As full joint distributions were directly manipulated by GEMA, the advantages of other probabilistic models such as the Bayesian networks (BNs) could be taken. In order to overcome these limitations, Zhang et al. [20] proposed another algorithm called Smooth which addressed both consistent and inconsistent constraints. However, the convergence of Smooth was only proven empirically through experiments. Therefore, the key drawback of the approaches [18–20] is that PKBs must be represented by probability distributions.
+  The problem of merging PKBs has been studied for a long time and gets a lot of attention in recent years. The idea of probabilistic merging has been introduced and discussed in detail by Vomlel \cite{18} . This work proposed a design and characterization of methods applicable to the merging process of knowledge bases represented by a set of probability distributions. Vomlel used the means of the Iterative Proportional Fitting Procedure (IPFP) to build a joint probability distribution from an input set of low-dimensional distributions. In the case of inconsistent input set, five iterative methods were proposed, namely: CC LCC, AA, GA, and GEM. In the case of consistent input set, iterative proportional fitting procedure have the best convergence rate of five iterative methods for inconsistent input set. However, several properties of methods were not proven and not achieved in this general case due to problems with probability distributions containing zeroes. Vomlel continued proposing another method that extends IPFP to deal with inconsistent constraints, named GEMA \cite{19}. It generalizes the concept of expectation maximization. The time performance of GEMA was extremely sensitive to both the initial knowledge bases and the constraints. As full joint distributions were directly manipulated by GEMA, the advantages of other probabilistic models such as the Bayesian networks (BNs) could be taken. In order to overcome these limitations, Zhang et al. \cite{20} proposed another algorithm called Smooth which addressed both consistent and inconsistent constraints. However, the convergence of Smooth was only proven empirically through experiments. Therefore, the key drawback of the approaches [18–20] is that PKBs must be represented by probability distributions.
 
-  Adamcik [23] associated the geometrical notion of projections by means of a Bregman divergence with the framework of pooling operators to solving the problem of probabilistic knowledge merging. A class of MOs based on minimization of a sum of convex Bregman divergences was introduced and proposed. The most common model of merging operator was defined by
+  Adamcik \cite{23} associated the geometrical notion of projections by means of a Bregman divergence with the framework of pooling operators to solving the problem of probabilistic knowledge merging. A class of MOs based on minimization of a sum of convex Bregman divergences was introduced and proposed. The most common model of merging operator was defined by
 
   $\Delta (\mathcal{K}_1, ... ,\mathcal{K}_n) = \{ \arg \min_{v \in D^L} H(w^{(i)}||v) : w^{(i)} \in V^L_{K_i}\}$
 
-  where L is a finite propositional language, $D^L$ is the set of all probability functions over, H is a Bregman divergence function and each PKB $\mathcal{K}_i$ for $1 \le i \le n$ over L is a set of constraints on probability functions over L such that the set of all probability functions satisfying the constraints in $K_i$ forms a nonempty closed convex subset $V^L_{K^i}$ of DL. The ˆ$\Delta D$ -merging operator was defined by using Squared Euclidean Distance and extending the LinOp-pooling operator, in the sense that it coincides with LinOp in the special case when each knowledge base admits only a single probability function. The linear Entropy Operator was defined by using Kullback-Leibler Divergence while the Linear Renyi Operator was employed Renyi Divergence. The linear Entropy Operator was similar to the Linear Euclidean Operator built by Osherson and Vardi in [26] and contained reversed parameter compared to Social Entropy Operator proposed by Wilmers in [21]. Adamcik also showed that MOs satisfied the natural principle of consistency. However, original PKBs and resulting knowledge base in this work were only represented by probabilistic functions and placed in the context of the propositional language. Moreover, more general applications as well as the rate of convergence of the algorithm need to be carefully investigated.
+  where L is a finite propositional language, $D^L$ is the set of all probability functions over, H is a Bregman divergence function and each PKB $\mathcal{K}_i$ for $1 \le i \le n$ over L is a set of constraints on probability functions over L such that the set of all probability functions satisfying the constraints in $K_i$ forms a nonempty closed convex subset $V^L_{K^i}$ of DL. The ˆ$\Delta D$ -merging operator was defined by using Squared Euclidean Distance and extending the LinOp-pooling operator, in the sense that it coincides with LinOp in the special case when each knowledge base admits only a single probability function. The linear Entropy Operator was defined by using Kullback-Leibler Divergence while the Linear Renyi Operator was employed Renyi Divergence. The linear Entropy Operator was similar to the Linear Euclidean Operator built by Osherson and Vardi in \cite{26} and contained reversed parameter compared to Social Entropy Operator proposed by Wilmers in \cite{21}. Adamcik also showed that MOs satisfied the natural principle of consistency. However, original PKBs and resulting knowledge base in this work were only represented by probabilistic functions and placed in the context of the propositional language. Moreover, more general applications as well as the rate of convergence of the algorithm need to be carefully investigated.
 
-  The new approach proposed in this paper is compared with existing ones given in the literature. Like the merging methods given in [18, 21, 23, 26], this 2 new approach also employs distance functions to find a set of probability functions representing common PKB. However, the first difference is that some propositions introduced in [9, 10] are applied to find probabilistic functions satisfying original PKB that is represented by probabilistic constraints. The second difference is that probability rules proposed [27] are employed to find new value of probabilistic constraints in common PKB.
+  The new approach proposed in this paper is compared with existing ones given in the literature. Like the merging methods given in [18, 21, 23, 26], this 2 new approach also employs distance functions to find a set of probability functions representing common PKB. However, the first difference is that some propositions introduced in [9, 10] are applied to find probabilistic functions satisfying original PKB that is represented by probabilistic constraints. The second difference is that probability rules proposed \cite{27} are employed to find new value of probabilistic constraints in common PKB.
 
 
   \section{Basic notions}
@@ -120,7 +207,7 @@
   (\textbf{P5}) $\mathcal{P}(\cup_{i=1}^\infty F_i) = \sum_{i=1}^n \mathcal{P}(F_i)$
 
   \begin{proof}
-    Axiom \textbf{P0} may be inferred easily from the Definition 1. Axiom \textbf{P1} is the result of Definition 2.10, axiom \textbf{P2} is the result of Theorem 2.14, axiom \textbf{P3} is the result of Theorem 2.13, axiom \textbf{P4} is the result of Theorem 2.9, axiom \textbf{P5} is the result of Corollary 2.2, which were proposed and proved in [27].
+    Axiom \textbf{P0} may be inferred easily from the Definition 1. Axiom \textbf{P1} is the result of Definition 2.10, axiom \textbf{P2} is the result of Theorem 2.14, axiom \textbf{P3} is the result of Theorem 2.13, axiom \textbf{P4} is the result of Theorem 2.9, axiom \textbf{P5} is the result of Corollary 2.2, which were proposed and proved in \cite{27}.
   \end{proof}
 
 
@@ -218,7 +305,7 @@
 
   subject to : $\sum^m_{i=1}\vartheta_i = 1; \vec{\vartheta}\geq\vec{0}$ (2)
 
-  Proposition 2 is the result of Proposition 4 which was proposed and proved in [10].
+  Proposition 2 is the result of Proposition 4 which was proposed and proved in \cite{10}.
 
   \textbf{Proposition 3}. 1-norm satisfied probabilistic vector of $\mathcal{K}$, denoted by $\vec{\mathcal{V}}^1_\mathcal{K}$, corresponding to $\vec{\vartheta}^*$ of the optimal solution of the following linear programming problem:
 
@@ -228,7 +315,7 @@
 
   $\sum^m_{i=1} \vartheta_i = 1; \vec{\vartheta}\geq\vec{0}    \vec{\lambda}\geq \vec{0}$ (5)
 
-  Proposition 3 is the result of Proposition 5 which was proposed and proved in [10].
+  Proposition 3 is the result of Proposition 5 which was proposed and proved in \cite{10}.
 
   \textbf{Proposition 4}.$\infty$-norm satisfied probabilistic vector of $\mathcal{K}$, denoted by $\vec{\vartheta}^\infty_\mathcal{K}$ , corresponding to $\vec{\vartheta}^*$ of the optimal solution of the following linear programming problem:
 
@@ -238,7 +325,7 @@
 
   $\sum^m_{i=1} \vartheta_i = 1; \vec{\vartheta}\geq\vec{0}; \lambda\geq 0$ (8)
 
-  Proposition 4 is the result of Proposition 6 which was proposed and proved in [10].
+  Proposition 4 is the result of Proposition 6 which was proposed and proved in \cite{10}.
 
   \textbf{Definition 10}. $\vec{A}_\mathcal{K}$ is called a diagonal double matrix of $\mathcal{K}$ whenever it is defined as follows:
 
@@ -267,11 +354,11 @@
 
   $(\rho_i + \ell_i - \zeta_i)\sum_{\Theta \in \cup(F_i \cap G_i)\vartheta_i} - \sum_{\Theta\in\cup(G_i)^\vartheta_i=0}$ (13)
 
-  Proposition 5 is the result of Proposition 9 which was proposed and proved in [10].
+  Proposition 5 is the result of Proposition 9 which was proposed and proved in \cite{10}.
 
   \textbf{Proposition 6}. $\mho(\mathcal{K}) = \vec{\vartheta}^1_\mathcal{K} = \vec{\vartheta}^p_\mathcal{K} = \vec{\vartheta}^\infty_\mathcal{K} = \vec{\vartheta}^u_\mathcal{K}$
 
-  Proposition 6 is the result of Proposition 5 which was proposed and proved in [24].
+  Proposition 6 is the result of Proposition 5 which was proposed and proved in \cite{24}.
 
   \subsection{Probabilistic MOs}
 
@@ -304,7 +391,7 @@
   subject to $\sum^n_{i=1}y_i = 1;\vec{y}^{SQ}_\mathcal{B} \geq \vec{0}$ (15)
 
   \begin{proof}
-    Let $\mathcal{C} = {\vec{y}^{SQ}_\mathcal{B} \in R^n | \sum^n_{i=1}  y_i = 1, \vec{y}^{SQ}_\mathcal{B} \geq \vec{0}}$ be a constraint set. Let $f(\vec{y}^{SQ}_\mathcal{B} ) = \sum^n_{i=1} d^{SQ}(X_i, y)$ be an objective function, where $x_i \in \mho(\mathcal{K}_i)$. Suppose that $y$ is optimal for (14). Then there exists $\vec{y}^{SQ}_\mathcal{B}$ such that $\eta = \sum^n_{i=1} d^{SQ}(x_i, y) and y \in \vec{y}^{SQ}_\mathcal{B} , \vec{y}^{SQ}_\mathcal{B}$ is an optimal point. This leads to $\mathcal{C}$ is nonempty and thus $\vec{y}^{SQ}_\mathcal{B}$ is feasible and attains the optimal value $f^*$ Therefore vector $\vec{y}^{SQ}_\mathcal{B}$ is the optimal solutions of (14) [25] .
+    Let $\mathcal{C} = {\vec{y}^{SQ}_\mathcal{B} \in R^n | \sum^n_{i=1}  y_i = 1, \vec{y}^{SQ}_\mathcal{B} \geq \vec{0}}$ be a constraint set. Let $f(\vec{y}^{SQ}_\mathcal{B} ) = \sum^n_{i=1} d^{SQ}(X_i, y)$ be an objective function, where $x_i \in \mho(\mathcal{K}_i)$. Suppose that $y$ is optimal for (14). Then there exists $\vec{y}^{SQ}_\mathcal{B}$ such that $\eta = \sum^n_{i=1} d^{SQ}(x_i, y) and y \in \vec{y}^{SQ}_\mathcal{B} , \vec{y}^{SQ}_\mathcal{B}$ is an optimal point. This leads to $\mathcal{C}$ is nonempty and thus $\vec{y}^{SQ}_\mathcal{B}$ is feasible and attains the optimal value $f^*$ Therefore vector $\vec{y}^{SQ}_\mathcal{B}$ is the optimal solutions of (14) \cite{25} .
   \end{proof}
 
   \textbf{Definition 15}. (SQ Merging Operator). Function $\Gamma^{SQ} : \mathcal{B} \to \mho (\mathcal{B})$ is called SE Merging Operator whenever it is defined as follows:
@@ -325,7 +412,7 @@
 
   Secondly, $\Gamma^{SQ}(\mathcal{B} \cup \mathcal{C}) \subseteq \Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C})$ needs to be proven. Suppose $\vec{y} = (\alpha_i, ..., \alpha_n, \beta1, ..., \beta_m) \in \Gamma^{SQ}(\mathcal{B} \cup \mathcal{C})$. Then $f^*(\vec{y}^{SQ}\mathcal{B}\cup\mathcal{C})=\sum^n_{i=1} d^{SQ} (\alpha_i, y) +\sum^m_{i=1} d^{SQ}(\beta_i, y)$ is the optimal value of optimization problem (14). Now assume that it does not exist $f^*(\vec{y}^{SQ}\mathcal{B} ) = \sum^n_{i=1} d^{SQ}(\alpha_i, y)$ and $f^*(\vec{y}^{SQ}\mathcal{C} ) = \sum^m_{i=1} d^{SQ}(\beta_i, y)$ then this would contradict the minimality of either $f^*(\vec{y}^{SQ}\mathcal{B} ) or f^*(\vec{y}^{SQ}\mathcal{C} ). Thus \vec{y} \in \Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C})$. Therefore, $\Gamma^{SQ}(\mathcal{B} \cup \mathcal{C}) \subseteq \Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C})$.
 
-  SDP. The proof for this property is similar to the proof for 4.1.5 in [23].
+  SDP. The proof for this property is similar to the proof for 4.1.5 in \cite{23}.
 
   DP. This property is easily result from SDP.
 
@@ -353,7 +440,7 @@
   and $y \in \vec{y}^{RB}_\mathcal{B} , \vec{y}^{RB}_\mathcal{B}$ is an optimal point. This leads to $\mathcal{C}$
   is nonempty and thus $\vec{y}^{RB}_\mathcal{B}$ is feasible and attains the
   optimal value $f^*$ Therefore vector $\vec{y}^{RB}_\mathcal{B}$ is the optimal
-  solutions of (16) [25].
+  solutions of (16) \cite{25}.
 
   \textbf{Definition 16}. (RB Merging Operator). Function
   $\Gamma^{RB} : \mathcal{B} \to \mho(\mathcal{B})$ is called RB Merging Operator
@@ -386,7 +473,7 @@
   and $y \in \vec{y}^{LE}_\mathcal{B} , \vec{y}^{LE}_\mathcal{B}$ is an optimal point. This leads to
   $C$ is nonempty and thus $\vec{y}^{LE}_\mathcal{B}$ is feasible and attains
   the optimal value $f^*$. Therefore, vector $\vec{y}^{LE}_\mathcal{B}$ is the
-  optimal solutions of (18) [25].
+  optimal solutions of (18) \cite{25}.
 
   \textbf{Definition 17}. (LE Merging Operator). Function
   $\Gamma^{LE} : \mathcal{B} \to \mho(\mathcal{B})$ is called LE Merging Operator
@@ -448,7 +535,7 @@
     an optimal point. This leads to C is nonempty and
     thus $\vec{y}^{SE}_\mathcal{B}$ is feasible and attains the optimal value $f^*$.
     Therefore vector $\vec{y}^SE_\mathcal{B}$ is the optimal solutions of (20)
-    [25].
+    \cite{25}.
   \end{proof}
 
 
@@ -561,8 +648,8 @@
       \Require{$\mathcal{K}$}
       \Ensure{SM1($\mathcal{K}$ )}
 %\Procedure{}{}
-      \For {$i=1, h$}
-        \For {$j=1, m$}
+      \For {$i=1 \to h$}
+        \For {$j=1 \to m$}
           \State $a_{ij} = \varphi(F_i \cap G_i,\Theta_j)(1 - \rho_i) - \varphi(\bar{F}_i \cap G_i,\Theta_j )\rho_i$
         \EndFor
       \EndFor
@@ -579,12 +666,12 @@
       \Require{$\mathcal{K}$}
       \Ensure{SM4($\mathcal{K}$ )}
 
-      \For {$i=1, h$}
-        \For {$j=1, 2h$}
-          \If {$(i = j) and (i \leq h ) and (j \leq h )$}
+      \For {$i=1 \to h$}
+        \For {$j=1 \to 2h$}
+          \If {$(i = j) \and (i \leq h ) \and (j \leq h )$}
             \State {$\bar{a}_{ij} = 1$}
           \ElsIf
-              {$(j - i = h ) and (j \leq 2h)$}
+              {$(j - i = h ) \and (j \leq 2h)$}
             \State {$\bar{a}_{ij} = -1$}
           \Else
             \State {$\bar{a}_{ij} = 0$}
@@ -601,14 +688,14 @@
 
   \textbf{The SM2 algorithm}. It is related to the $\infty$-norm and implemented similar to the SM1. However, in the second stage, it solves optimization problem (6) with constraints (7)–(8). It originates from Proposition 4.
 
-  \textbf{The SM3 algorithm}. It is related to the p-norm and implemented similar to the SM1. However, in the second stage, it solves optimization problem (1) with constraints (2). The problem (1) with constraints (2) is implemented by using interior-point algorithm [29]. It originates from Proposition 3.
+  \textbf{The SM3 algorithm}. It is related to the p-norm and implemented similar to the SM1. However, in the second stage, it solves optimization problem (1) with constraints (2). The problem (1) with constraints (2) is implemented by using interior-point algorithm \cite{29}. It originates from Proposition 3.
 
   \textbf{The SM4 algorithm}. It also describes a process of searching a set of probability functions satisfying PKB $\mathcal{K}$ but it does not base on norm. It also consists of two stages, (i) finding diagonal double matrix $\bar{A}_\mathcal{K}$, and followed by (ii) solving optimization problem. Lines from 1 to 5 present the first stage by employing Definition 10. The second stage is presented in line by solving optimization problem (9) with constraints (11–13). It originates from Proposition 5.
 
   The solution of the problem (9) is similar to the method of solving (1). By Proposition lead to a same result.
 
   \subsubsection{The computational complexity}
-  The interior-point methods [29] were employed to
+  The interior-point methods \cite{29} were employed to
   solve convex optimization problems:
 
   $min f_0(x)$ (24)
@@ -669,7 +756,7 @@
     2, as the objective functions of problems are not
     linear, computing $\vec{\vartheta}^p\_\mathcal{K}$
     based on the interior-point algorithm
-    proposed in [29]. By (24)–(25) and (5), it
+    proposed in \cite{29}. By (24)–(25) and (5), it
     follows that $f_0(\vec{\vartheta}) = \parallel A_\mathcal{K}\vec{\vartheta}\parallel_p f_i(\vec{\vartheta}) = -\vartheta_i$ for $i =
     1, ... , |\Lambda(\hat{\varepsilon})|$, $Q = \underbrace{(1, ... , 1)}_{|\Lambda(\hat{\varepsilon})|}$. By (26) $\nabla \Phi \left( \vec{\vartheta} \right) = \sum^{|\Lambda(\hat{\varepsilon})|}_{i=1} \frac{1}{\vartheta_i}$
     and thus $t^{(0)}_{SM3}$ is the value that minimizes
@@ -693,7 +780,7 @@
     the constraint functions of problems are not linear,
     computing $\vec{\vartheta}^u_\mathcal{K}$
     based on the interior-point algorithm
-    proposed in [29]. By (24)–(25) and (9), it follows that
+    proposed in \cite{29}. By (24)–(25) and (9), it follows that
     $f_0\left(\vec{\vartheta}\right) = \sum^h_{i=1}(\ell_i + \zeta_i),Q = (1, ... , 1)$.
   \end{proof}
 
@@ -716,7 +803,7 @@
   functions (from line 2 to 5), and solving optimization problem (14) (line 8) with objective function f (from line 6 to 7). It originates from Proposition 7.
 
   The problem (14) with constraints (15) is also
-  implemented by using interior-point algorithm [29].
+  implemented by using interior-point algorithm \cite{29}.
 
   \textbf{The RBMA algorithm}. This algorithm is implemented
   similar to the SQMA. Instead of using SQ
@@ -727,23 +814,19 @@
   \begin{algorithm}
     \caption{The SQMA algorithm}
     \begin{algorithmic}[1]
-      \Require{$\mathcal{B} = {\mathcal{K}_1, ...,\mathcal{K}_n}$}
+      \Require{$\mathcal{B} = \{\mathcal{K}_1, ...,\mathcal{K}_n\}$}
       \Ensure{SQMA($\mathcal{B})$}
-      \For
-        $\mathcal{K}_i \in \mathcal{B}$
+      \For {$\mathcal{K}_i \in \mathcal{B}$}
         \State $(\mathcal{K}_i )$
       \EndFor
-      \For
-        $i=1 to n$
+      \For {$i=1 \to n$}
         \State $di \gets 0$
-        \For
-          $x_j \in \mho(\mathcal{K}_i)$
+        \For {$x_j \in \mho(\mathcal{K}_i)$}
           \State $d_i \gets d_i + (x_j - y_j)^2$
         \EndFor
       \EndFor
       \State $f \gets 0$
-      \For
-        $i=1 to n$
+      \For {$i=1 \to n$}
         \State $f \gets f + d_i$
       \EndFor
       \State Solving problem (14), where $f$ is objective function and
@@ -776,28 +859,28 @@
   \textbf{The HULL algorithm}. It consists of three stages, (i) for each $\mathcal{K}_i$ finding a set of probability function
   values satisfying $\mathcal{K}_i$ and finding profile matrix, (ii)
   generating vector $\vec{\lambda}$ such as $\lambda_i \in [0, 1]$ and
-  $\sum^|\mathcal{H}|_{i=1} \lambda_i = 1$, and followed by (iii) computing $\hat{A}_\mathcal{B}\vec{\lambda}$. The HULL originates from Proposition 15.
-
-  \subsubsection{The computational complexity}
-
-  \textbf{Proposition 21}. The computational complexity of the
-  SQMA algorithm is $\mathcal{O}(\max\{n \bar{N}, n|\Lambda(\hat{\varepsilon})|,N_{SQMA} \})$.
+  $\sum^{|\mathcal{H}|}_{i=1} \lambda_i = 1$, and followed by (iii) computing $\hat{A}_\mathcal{B}\vec{\lambda}$. The HULL originates from Proposition 15.
 
   \begin{algorithm}
     \caption{The HULL algorithm}
     \begin{algorithmic}[1]
       \Require{$\mathcal{B} = {\mathcal{K}_1, ...,\mathcal{K}_n}$}
       \Ensure{HULL($\mathcal{B})$}
-      \For
-        $\mathcal{K}_i \in \mathcal{B}$
+      \For {        $\mathcal{K}_i \in \mathcal{B}$}
         \State $\mho(\mathcal{K}_i)$
       \EndFor
       \State Finding profile matrix $\hat{A}_\mathcal{B}$
-      \State Generating $\vec{\lambda}$ such as $\sum^|H|_{i=1} \lambda_i = 1, \lambda_i \in [0, 1]$
+      \State Generating $\vec{\lambda}$ such as $\sum^{\mathcal|H|}_{i=1} \lambda_i = 1, \lambda_i \in [0, 1]$
       \State $\vec{y}^{HU}_\mathcal{B} = \hat{A}_\mathcal{B} \vec{\lambda}$
       \State \Return $\vec{y}^{HU}_\mathcal{B}$
     \end{algorithmic}
   \end{algorithm}
+
+  \subsubsection{The computational complexity}
+
+  \textbf{Proposition 21}. The computational complexity of the
+  SQMA algorithm is $\mathcal{O}(\max\{n \bar{N}, n|\Lambda(\hat{\varepsilon})|,N_{SQMA} \})$.
+
 
   \begin{proof}
     The cost of SQMA depends on two stages. In
@@ -805,11 +888,11 @@
     second stage, the cost for building SQ divergence distance
     functions is $\mathcal{O}(n |\Lambda(\hat{\varepsilon})|)$; the cost for building
     the objective function is $\mathcal{O}(n)$; computing $\vec{y}^{SQ}_\mathcal{B}$ based
-    on the interior-point algorithm proposed in [29] and
+    on the interior-point algorithm proposed in \cite{29} and
     by (28) and (14), the cost can be done in $\mathcal{O}(N_{SQMA})$
     and thus the total of cost for the second stage is
     $\mathcal{O}(\max\{n |\Lambda(\hat{\varepsilon})|,N_{SQMA}\})$. By (24)–(25) and (14),
-    it follows that $f_0 \left( \vec{y}^{SQ}_\mathcal{B} \right) = \sum^n_{i=1} d^{SQ}(x_i, y), Q = \underbrace{(1, ... , 1)}{|\Lambda(\hat{\varepsilon})|}$. By (26), $\nabla \Phi \left( \vec{y}^{SQ}_\mathcal{B} \right) = \sum^{|\Lambda(\hat{\varepsilon})|}_{i=1} \frac{1}{1
+    it follows that $f_0 \left( \vec{y}^{SQ}_\mathcal{B} \right) = \sum^n_{i=1} d^{SQ}(x_i, y), Q = \underbrace{(1, ... , 1)}_{|\Lambda(\hat{\varepsilon})|}$. By (26), $\nabla \Phi \left( \vec{y}^{SQ}_\mathcal{B} \right) = \sum^{|\Lambda(\hat{\varepsilon})|}_{i=1} \frac{1}{1
     y_i}$
     and
     thus $t^{(0)}_{SQMA}$ is the value that minimizes
@@ -850,12 +933,10 @@
       \Require{- Probability merging vector of $\mathcal{B}$,$\vec{y}$
         - Probabilistic constraints}
       \Ensure{PCVA ($\vec{\lambda}$ )}
-      \For
-        each constraint (F)[$\rho$]
+      \For {each constraint (F)[$\rho$]}
         \State $\rho$ is computed by using axioms P0, P3, P4 in Proposition 1
       \EndFor
-      \For
-        each constraint (F|G)[$\rho$]
+      \For {each constraint (F $|$ G)[$\rho$] }
         \State $\rho$ is computed by using axioms P1, P2 in Proposition 1
       \EndFor
       \State \Return $\vec{y}$
@@ -876,7 +957,7 @@
 
   \subsection{Algorithm for computing new probability value of constraints}
 
-  \textbf{The PVCA algorithm}. It describes the process of computing new probability value of constraints in merged knowledge base. It consists of two stages, (i) computing new probability value of constraints having form (F)[$\rho$ ], and (ii) computing new probability value of constraints having form (F|G)[$\rho$]. It originates from Proposition 1.
+  \textbf{The PVCA algorithm}. It describes the process of computing new probability value of constraints in merged knowledge base. It consists of two stages, (i) computing new probability value of constraints having form $(F)[\rho]$, and (ii) computing new probability value of constraints having form $(F|G)[\rho]$. It originates from Proposition 1.
 
   \textbf{Proposition 26}. The computational complexity of PCVA algorithm is $\mathcal{O}(|\vec{y} |)$.
 
@@ -886,6 +967,12 @@
 
 
   By using algorithm for finding probability merging vector, distance-based merging algorithms, and algorithm for computing new probability value of constraints, a common consistent PKB can be obtained from a PKB profile. The process of merging PKB is presented in Fig. 1.
+
+  \begin{figure}[t]
+    \caption{The process of merging PKBs.}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figure1}
+  \end{figure}
 
   \subsection{Example}
 
@@ -906,7 +993,7 @@
 
   \begin{table*}
     \caption{Original PKBs and merged knowledge bases for algorithms SQMA, LEMA, and SEMA}
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \begin{tabular}{c c c c c c c c c }
       \hline
       $\kappa$ & $\mathcal{K}_1$ & $\mathcal{K}_2$ & $\mathcal{K}_3$ & $\mathcal{K}_4$ & $\mathcal{K}_5$
       & SQMA
@@ -925,19 +1012,17 @@
 
   \begin{table*}[htb]
     \caption{Merged knowledge bases for algorithms RBMA and HULL}
-    \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
+    \begin{tabular}{l c c c c c c c c}
       \hline
-      {$\kappa$} & \multicolumn{3}{|c|}{RBMA} & \multicolumn{3}{|c|}{HULL} \\
-      \hline
-      \multicolumn{3}{|c|}{r} & \multicolumn{3}{|c|}{$\vec{\lambda}$} \\
-      \hline
+      {$\kappa$} & \multicolumn{3}{c}{RBMA} & \multicolumn{3}{c}{HULL} \\
+      & \multicolumn{3}{c}{r} & \multicolumn{3}{c}{$\vec{\lambda}$} \\
       & 1.2        & 1.5        & 2          & (0.2, 0.2, 0.2, 0.2, 0.2) & (0.1, 0.2, 0.3, 0.3, 0.1) & (0.5, 0, 0, 0, 0.5) \\
       \hline
-      (D)   & 0.59246940 & 0.60675762 & 0.64030201 & 0.62000000                & 0.62000000                & 0.65000000\\
-      (S)   & 0.64011368 & 0.64590239 & 0.65792817 & 0.66000000                & 0.66000000                & 0.70000000\\
-      (L)   & 0.51766261 & 0.51297004 & 0.50207822 & 0.54000000                & 0.54000000                & 0.55000000\\
-      (S|D) & 0.77227016 & 0.77914565 & 0.78901069 & 0.76774194                & 0.75483871                & 0.75384615\\
-      (D|L) & 0.67921817 & 0.69614187 & 0.74231507 & 0.68518519                & 0.67592593                & 0.63636364          \\
+      (D)     & 0.59246940 & 0.60675762 & 0.64030201 & 0.62000000                & 0.62000000                & 0.65000000\\
+      (S)     & 0.64011368 & 0.64590239 & 0.65792817 & 0.66000000                & 0.66000000                & 0.70000000\\
+      (L)     & 0.51766261 & 0.51297004 & 0.50207822 & 0.54000000                & 0.54000000                & 0.55000000\\
+      (S$|$D) & 0.77227016 & 0.77914565 & 0.78901069 & 0.76774194                & 0.75483871                & 0.75384615\\
+      (D$|$L) & 0.67921817 & 0.69614187 & 0.74231507 & 0.68518519                & 0.67592593                & 0.63636364          \\
     \end{tabular}
   \end{table*}
 
@@ -947,12 +1032,11 @@
   In this paper, a new distance-based approach to implement the process of merging PKBs was proposed. The probabilistic MOs based on divergence concepts have been taken under deep consideration and adapted to new probabilistic merging framework by building distance functions between probabilities of constraints. Propositions to calculate the satisfied probabilistic functions of original knowledge bases, probability merging vector, and new probability of constraints in merged PKB were also proposed and proven. Then, postulates about logical relationships between the family of MOs and desirable properties were given. Finally, computational propositions were employed to build merging algorithms. The key differences between the proposed method and existing ones are that input knowledge bases and the merged knowledge base are represented by probabilistic constraints, and our method is considered in a sample space context. However, the input of merging algorithms was PKBs required to be in the same form. Therefore, in the future, new methods will be going on investigating to allow the original knowledge bases to vary in form.
 
 
-  \section{Acknowledgment}
+  \section*{Acknowledgment}
 
   This work has been supported by Vietnam National University, Hanoi (VNU), under Project No. QG.19.23. The authors would like to thank Professor Quang Thuy Ha and Knowledge Technology and Data Science Lab, Faculty of Information Technology, VNU - University of Engineering and Technology for expertise support.
 
-  \section*{References}
-
+\typeout{}
   \bibliography{output}
 
 \end{document}
