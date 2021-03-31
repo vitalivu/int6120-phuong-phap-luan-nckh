@@ -1,21 +1,29 @@
 \documentclass[]{iosart2c}
-\makeatletter\if@twocolumn\PassOptionsToPackage{switch}{}\else\fi\makeatother
-
-\usepackage{amsmath,tabulary,graphicx,times,caption,fancyhdr}
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-% \usepackage[T1]{fontenc}
-
-% \usepackage{latexsym}
-\usepackage{mathtools, amssymb, amsfonts, amsmath}
-% \usepackage{microtype}
+\usepackage{times,mathtools, amssymb, amsfonts, amsmath, fancyhdr, graphics, dcolumn, natbib}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
-\usepackage{multirow}
+\usepackage[switch]{lineno}
+\usepackage[none]{hyphenat}
+
+% \usepackage[style=apa,backend=biber,bibencoding=latin1]{biblatex}
+% \addbibresource{output.bib}
 
 \renewcommand{\algorithmicrequire}{Input:}
 \renewcommand{\algorithmicensure}{Output:}
 
+\linenumbers
+\renewcommand{\baselinestretch}{1.1}
+\setlength{\parskip}{.85em}
+
+
+\def\QEDmark{\ensuremath{\square}}
+\def\proof{\paragraph{\textbf{Proof}.}}
+\def\endproof{\hfill\QEDmark}
+
 \begin{document}
+
 \begin{frontmatter}              % The preamble begins here.
 
 %\pretitle{Pretitle}
@@ -23,7 +31,7 @@
 \title{A distance-based approach for merging\\
 probabilistic knowledge bases}
 
-\runningtitle{V.T. Nguyen et al. / A distance-based approach for merging probabilistic knowledge bases}
+\runningtitle{A distance-based approach for merging probabilistic knowledge bases}
 %\subtitle{Subtitle}
 
 \author[A,C]{\fnms{Van Tham} \snm{Nguyen}},
@@ -70,11 +78,11 @@ The rest of this paper is organized as follows. The second section presents the 
 
 \section{Related work}
 
-The problem of merging PKBs has been studied for a long time and gets a lot of attention in recent years. The idea of probabilistic merging has been introduced and discussed in detail by Vomlel [18]. This work proposed a design and characterization of methods applicable to the merging process of knowledge bases represented by a set of probability distributions. Vomlel used the means of the Iterative Proportional Fitting Procedure (IPFP) to build a joint probability distribution from an input set of low-dimensional distributions. In the case of inconsistent input set, five iterative methods were proposed, namely: CC LCC, AA, GA, and GEM. In the case of consistent input set, iterative proportional fitting procedure have the best convergence rate of five iterative methods for inconsistent input set. However, several properties of methods were not proven and not achieved in this general case due to problems with probability distributions containing zeroes. Vomlel continued proposing another method that extends IPFP to deal with inconsistent constraints, named GEMA [19]. It generalizes the concept of expectation maximization. The time performance of GEMA was extremely sensitive to both the initial knowledge bases and the constraints. As full joint distributions were directly manipulated byGEMA, the advantages of other probabilistic models such as the Bayesian networks (BNs) could be taken. In order to overcome these limitations, Zhang et al. [20] proposed another algorithm called Smooth which addressed both consistent and inconsistent constraints. However, the convergence of Smooth was only proven empirically through experiments. Therefore, the key drawback of the approaches [18–20] is that PKBs must be represented by probability distributions. 
+The problem of merging PKBs has been studied for a long time and gets a lot of attention in recent years. The idea of probabilistic merging has been introduced and discussed in detail by Vomlel \citep{18} . This work proposed a design and characterization of methods applicable to the merging process of knowledge bases represented by a set of probability distributions. Vomlel used the means of the Iterative Proportional Fitting Procedure (IPFP) to build a joint probability distribution from an input set of low-dimensional distributions. In the case of inconsistent input set, five iterative methods were proposed, namely: CC LCC, AA, GA, and GEM. In the case of consistent input set, iterative proportional fitting procedure have the best convergence rate of five iterative methods for inconsistent input set. However, several properties of methods were not proven and not achieved in this general case due to problems with probability distributions containing zeroes. Vomlel continued proposing another method that extends IPFP to deal with inconsistent constraints, named GEMA [19]. It generalizes the concept of expectation maximization. The time performance of GEMA was extremely sensitive to both the initial knowledge bases and the constraints. As full joint distributions were directly manipulated by GEMA, the advantages of other probabilistic models such as the Bayesian networks (BNs) could be taken. In order to overcome these limitations, Zhang et al. [20] proposed another algorithm called Smooth which addressed both consistent and inconsistent constraints. However, the convergence of Smooth was only proven empirically through experiments. Therefore, the key drawback of the approaches [18–20] is that PKBs must be represented by probability distributions. 
 
 Adamcik [23] associated the geometrical notion of projections by means of a Bregman divergence with the framework of pooling operators to solving the problem of probabilistic knowledge merging. A class of MOs based on minimization of a sum of convex  Bregman divergences was introduced and proposed. The most common model of merging operator was defined by
 
-$(\mathcal{K}_1, ... ,\mathcal{K}_n) = \{ \arg \min_{v \in D^L} H(w^{(i)}||v) : w^{(i)} \in V^L_{K_i}\}$
+$\Delta (\mathcal{K}_1, ... ,\mathcal{K}_n) = \{ \arg \min_{v \in D^L} H(w^{(i)}||v) : w^{(i)} \in V^L_{K_i}\}$
 
 where L is a finite propositional language, $D^L$ is the set of all probability functions over, H is a Bregman divergence function and each PKB $\mathcal{K}_i$ for $1 \le i \le n$ over L is a set of constraints on probability functions over L such that the set of all probability functions satisfying the constraints in $K_i$ forms a nonempty closed convex subset $V^L_{K^i}$ of DL. The ˆ$\Delta D$ -merging operator was defined by using Squared Euclidean Distance and extending the LinOp-pooling operator, in the sense that it coincides with LinOp in the special case when each knowledge base admits only a single probability function. The linear Entropy Operator was defined by using Kullback-Leibler Divergence while the Linear Renyi Operator was employed Renyi Divergence. The linear Entropy Operator was similar to the Linear Euclidean Operator built by Osherson and Vardi in [26] and contained reversed parameter compared to Social Entropy Operator proposed by Wilmers in [21]. Adamcik also showed that MOs satisfied the natural principle of consistency. However, original PKBs and resulting knowledge base in this work were only represented by probabilistic functions and placed in the context of the propositional language. Moreover, more general applications as well as the rate of convergence of the algorithm need to be carefully investigated. 
 
@@ -82,13 +90,15 @@ The new approach proposed in this paper is compared with existing ones given in 
 
 \section{Basic notions}
 
-A sample space, denoted by $\mathcal S$, is a set which includes all possible outcomes of a statistical experiment. A finite set of possible outcomes forms an event. A set of events denoted by $\hat{\varepsilon}$, $\hat{\varepsilon} = \{ E _1, ... , E_n \}$. Given $F,G \in \hat{\varepsilon}$ , the intersection $F$ and $G$, denoted by $F \cap G$, is an event which contains all elements that are common to $F$ and $G$; the negation of event $F$, denoted by $\neg F$, is abbreviated by $\neg F$ . A complete conjunction of $\hat{\varepsilon}$ denoted by $\Theta$,$\Theta = \tilde E1 \cap \tilde E2 \cap ... \cap \tilde E_n$ where $\tilde E_i = {E_i, \neg E_i}$. A set of all complete conjunctions of $\hat{\varepsilon}$, denoted by $\wedge (\hat{\varepsilon}),\wedge (\hat{\varepsilon}),= {\Theta_i, ... , \Theta_{2^n}  }$. A complete conjunction $\Theta \in \wedge (\hat{\varepsilon} )$ satisfies an event $F$, denoted by $\Theta \Delta \models F$, iff  $F$ appears in $\Theta$. Also, it said that $\Theta \Delta \models {E_i, ... , E_n}$ if $\Theta \Delta \models E_i, \forall 1 \le i \le n$. Let $f\mho (X) = {\Theta \in \Delta (\hat{\varepsilon} )|\Theta \Delta \models X}$, where $X$ is an event or a set of events. Let $m = |\Lambda(\hat{\varepsilon})| = 2n$ be the numbers of complete conjunctions of $\hat{\varepsilon}$ . Let $R_{\geq0}$ be the set of non-negative real values including $+\infty$. Let $R_{[0,1]}$ be the set of all real values from 0 to 1.
+A sample space, denoted by $\mathcal S$, is a set which includes all possible outcomes of a statistical experiment. A finite set of possible outcomes forms an event. A set of events denoted by $\hat{\varepsilon}$, $\hat{\varepsilon} = \{ E _1, ... , E_n \}$. Given $F,G \in \hat{\varepsilon}$ , the intersection $F$ and $G$, denoted by $F \cap G$, is an event which contains all elements that are common to $F$ and $G$; the negation of event $F$, denoted by $\neg F$, is abbreviated by $\neg F$ . A complete conjunction of $\hat{\varepsilon}$ denoted by $\Theta$,$\Theta = \tilde E1 \cap \tilde E2 \cap ... \cap \tilde E_n$ where $\tilde E_i = {E_i, \neg E_i}$. A set of all complete conjunctions of $\hat{\varepsilon}$, denoted by $\wedge (\hat{\varepsilon}),\wedge (\hat{\varepsilon}),= {\Theta_i, ... , \Theta_{2^n}  }$. A complete conjunction $\Theta \in \wedge (\hat{\varepsilon} )$ satisfies an event $F$, denoted by $\Theta \Delta \models F$, iff  $F$ appears in $\Theta$. Also, it said that $\Theta \Delta \models {E_i, ... , E_n}$ if $\Theta \Delta \models E_i, \forall 1 \le i \le n$. Let $f\mho (X) = {\Theta \in \Delta (\hat{\varepsilon} )|\Theta \Delta \models X}$, where $X$ is an event or a set of events. Let $m = |\Lambda(\hat{\varepsilon})| = 2n$ be the numbers of complete conjunctions of $\hat{\varepsilon}$ . Let $\mathbb{R}_{\geq0}$ be the set of non-negative real values including $+\infty$. Let $\mathbb{R}_{[0,1]}$ be the set of all real values from 0 to 1.
 
-\textbf{Definition 1}. Let $\mathcal{P} : (\hat{\varepsilon} \Delta ) \to R_{[0,1]}$ such as, 
+
+\textbf{Definition 1}. Let $\mathcal{P} : \Lambda(\hat{\varepsilon}) \to \mathbb{R}_{[0,1]}$ such as, 
 $\sum_{i=1}^m \mathcal{P} (\Theta i) = 1$, $\mathcal{P}$ is called a probability function.
 Let $\hat{\mathcal{P}} (\hat  \varepsilon )$ be a set of all probability functions $\mathcal{P}$ over set of events $\hat  \varepsilon$, defined by $\hat{\mathcal{P}}(\hat  \varepsilon) =  {\mathcal{P} (\Theta1), ... ,\mathcal{P} (\Theta_{2^n} )}$. Let $\vec{\vartheta} = (\vartheta_1, ... , \vartheta_m)^T$ be a column vector, where an auxiliary variable $\vartheta_i$ corresponding to a probability $\mathcal{P}(\Theta_i)$.
 
-\textbf{Proposition 1}. Let $F,G \in \hat{\varepsilon}$ Probability function $\mathcal{P}$ satisfies the following probability axioms:
+
+\textbf{Proposition 1}. \textit{Let $F,G \in \hat{\varepsilon}$ Probability function $\mathcal{P}$ satisfies the following probability axioms}:
 
 (\textbf{P0}) $\mathcal{P}(F) = \sum_{\Theta  \in  \Lambda (\hat{\varepsilon}):\Theta  \models F}\mathcal{P}(\Theta)$
 
@@ -104,11 +114,12 @@ Let $\hat{\mathcal{P}} (\hat  \varepsilon )$ be a set of all probability functio
 
 (\textbf{P5}) $\mathcal{P}(\cup_{i=1}^\infty F_i) = \sum_{i=1}^n \mathcal{P}(F_i)$
 
-\textbf{Proof}. Axiom \textbf{P0} may be inferred easily from the Definition 1. Axiom \textbf{P1} is the result of Definition 2.10, axiom \textbf{P2} is the result of Theorem 2.14, axiom \textbf{P3} is the result of Theorem 2.13, axiom \textbf{P4} is the result of Theorem 2.9, axiom \textbf{P5} is the result of Corollary 2.2, which were proposed and proved in [27].
+\begin{proof} Axiom \textbf{P0} may be inferred easily from the Definition 1. Axiom \textbf{P1} is the result of Definition 2.10, axiom \textbf{P2} is the result of Theorem 2.14, axiom \textbf{P3} is the result of Theorem 2.13, axiom \textbf{P4} is the result of Theorem 2.9, axiom \textbf{P5} is the result of Corollary 2.2, which were proposed and proved in [27].
+\end{proof}
 
-\textbf{Definition 2}. Let $F,G \in \hat{\varepsilon}$ and $\rho \in R_{[0,1]}$. A probabilistic constraint is an expression of the form $c[\rho]$,where $c = (F|G)$.
+\textbf{Definition 2}. Let $F,G \in \hat{\varepsilon}$ and $\rho \in \mathbb{R}_{[0,1]}$. A probabilistic constraint is an expression of the form $c[\rho]$,where $c = (F|G)$.
 
-Intuitively, a constraint $(F|G)[\rho]$ means that our knowledge in $F$ given that $G$  hold has probability value $\rho$. If $F$ does not depend on $G,G \equiv T, (F|T)[\rho]$, is abbreviated by $(F)[\rho]$.
+Intuitively, a constraint $(F|G)[\rho]$ means that our knowledge in $F$ given that $G$  hold has probability value $\rho$. If $F$ does not depend on $G,G \equiv _\top, (F|_\top)[\rho]$, is abbreviated by $(F)[\rho]$.
 
 \textbf{Definition 3}. A PKB, denoted by $\mathcal{K} = \langle \kappa_1, ... \kappa kh \rangle$, is a finite set of probabilistic constraints, where $\kappa i = c_i[\rho_i]$ for all $i = 1, ... h$. 
 
@@ -123,10 +134,10 @@ Let $h = |\mathcal{K}|$ be the total number of constraints in $\mathcal{K}$. A p
 \begin{enumerate}
 
 \item $\forall \mathcal{K}_i \in \mathcal{B} : \mathbb{K}_i \nvDash \perp$
-\item $\forall \mathcal{K}_i,\mathcal{K}_j (i \neq j) :$
-	$+|\mathcal{K}_i| = |\mathcal{K}_j|$ 
-	$+\forall c_k[\rho k] \in \mathcal{K}_i; c'_{k'} [\rho k'] \in \mathcal{K}_j; k = k' : c_k = c'_{k'}$
-$\mathcal{K}_i$ is consistent to $\mathcal{K}_2$ iff they satisfy condition 2, denoted by $\mathcal{K}_1||\mathcal{K}_2$. Otherwise, $\mathcal{K}_1 nparallel \mathcal{K}_2$.
+\item $\forall \mathcal{K}_i,\mathcal{K}_j (i \neq j) :$\\
+	$+|\mathcal{K}_i| = |\mathcal{K}_j|$ \\
+	$+\forall c_k[\rho k] \in \mathcal{K}_i; c'_{k'} [\rho k'] \in \mathcal{K}_j; k = k' : c_k = c'_{k'}$\\
+$\mathcal{K}_i$ is consistent to $\mathcal{K}_2$ iff they satisfy condition 2, denoted by $\mathcal{K}_1||\mathcal{K}_2$. Otherwise, $\mathcal{K}_1 \nparallel \mathcal{K}_2$.
 
 \end{enumerate}
 
@@ -134,47 +145,47 @@ $\mathcal{K}_i$ is consistent to $\mathcal{K}_2$ iff they satisfy condition 2, d
 
 \subsection{Desirable properties}
 
-In the rest later, several properties of our family of probabilistic MOs used to characterize MOs will be put forward. Let be a function $\Gamma: \mathcal{B} \to \cup(\mathcal{B})$ that maps a PKB profile onto a set of all probability function values satisfying $\mathcal{B}$. The following definition is similar to a set of logical properties which was stated in [3, 28].
+In the rest later, several properties of our family of probabilistic MOs used to characterize MOs will be put forward. Let be a function $\Gamma: \mathcal{B} \to \mho(\mathcal{B})$ that maps a PKB profile onto a set of all probability function values satisfying $\mathcal{B}$. The following definition is similar to a set of logical properties which was stated in [3, 28].
 
-\textbf{Definition 7}. Let $\mathcal{B} = {\mathcal{K}_1 , ... ,\mathcal{K}_n}$ and, $\mathcal{C} = {\mathcal{K}_1, ... ,\mathcal{K}_m}$ be PKB profiles. Let $\mathcal{K}$ be a consistent PKBs. Function $\Gamma: \mathcal{B} \to \upsilon(\mathcal{B})$ is called a probabilistic merging operator iff the following properties hold:
+\textbf{Definition 7}. Let $\mathcal{B} = \{\mathcal{K}_1 , ... ,\mathcal{K}_n\}$ and, $\mathcal{C} = \{\mathcal{K}_1, ... ,\mathcal{K}_m\}$ be PKB profiles. Let $\mathcal{K}$ be a consistent PKBs. Function $\Gamma: \mathcal{B} \to \upsilon(\mathcal{B})$ is called a probabilistic merging operator iff the following properties hold:
 
-(\textbf{CP1}) Consistency Principle. If $\cap^n_{i=1}\mho(\mathcal{K}_i) \neq \emptyset$ then $\Gamma(\mathcal{B}) \subseteq \cap^n_{i=1}\mho(\mathcal{K}_i)$
-The property CP1 assures that if the input PKB profile is consistent then the result of merging will be a subset of the intersection of the set of all probability function values satisfying $\mathcal{K}_i$.
+(\textbf{CP1}) \textit{Consistency Principle. If $\cap^n_{i=1}\mho(\mathcal{K}_i) \neq \emptyset$ then $\Gamma(\mathcal{B}) \subseteq \cap^n_{i=1}\mho(\mathcal{K}_i)$
+The property CP1 assures that if the input PKB profile is consistent then the result of merging will be a subset of the intersection of the set of all probability function values satisfying $\mathcal{K}_i$.}
 
-(\textbf{SCP}) Strong Consistency Principle. If $\cap^n_{i=1}\mho(\mathcal{K}_i) \neq \emptyset$ then $\Gamma(\mathcal{B}) = \cap^n_{i=1}\mho(\mathcal{K}_i)$
+(\textbf{SCP}) \textit{Strong Consistency Principle. If $\cap^n_{i=1}\mho(\mathcal{K}_i) \neq \emptyset$ then $\Gamma(\mathcal{B}) = \cap^n_{i=1}\mho(\mathcal{K}_i)$}
 
 \textit{The property SCP assures that if the input PKB profile is consistent then the result of merging will be the intersection of the set of all probability function
 values satisfying $\mathcal{K}_i$.}
 
-(\textbf{IP}) Ignorance Principle. $\forall \mathcal{K} = \emptyset : \Gamma(\mathcal{B} \cup \mathcal{K}) = \Gamma(\mathcal{B})$
+(\textbf{IP}) \textit{Ignorance Principle. $\forall \mathcal{K} = \emptyset : \Gamma(\mathcal{B} \cup \mathcal{K}) = \Gamma(\mathcal{B})$}
 
 \textit{The property IP state that the result of merging process should not be affected when an empty PKB is added.}
 
-(\textbf{EP}) Equivalence Principle. If there exists a permutation $\mu on {1, ... , n}$ such that $\Omega(\mathcal{K}_i) = (\mathcal{K}_\mu(i))$ then $\Gamma(\mathcal{B}) =  \Gamma(\mathcal{C})$
+(\textbf{EP}) \textit{Equivalence Principle. If there exists a permutation $\mu on {1, ... , n}$ such that $\Omega(\mathcal{K}_i) = (\mathcal{K}_\mu(i))$ then $\Gamma(\mathcal{B}) =  \Gamma(\mathcal{C})$}
 
-The property EP implies that result of merging process should not be contingent on the occurrence order of PKBs.
+\textit{The property EP implies that result of merging process should not be contingent on the occurrence order of PKBs.}
 
 (\textbf{CP2}) Collegiality Principle. If $\cap^m_{i=1|\mho(\mathcal{K}_i} \neq \emptyset$ and $\Gamma(\mathcal{B}) \subseteq \cap^m_{i=1}\mho(\mathcal{K'_i})$ then $\Gamma(\mathcal{B} \cup \mathcal{C}) + \Gamma(\mathcal{B})$.
 
-The property CP2 implies that the result of merging process should not be affected when a PKB profile which the intersection of the set of all probability function values satisfying $\mathcal{K}_i$ in it contains the merging result of other is added.
+\textit{The property CP2 implies that the result of merging process should not be affected when a PKB profile which the intersection of the set of all probability function values satisfying $\mathcal{K}_i$ in it contains the merging result of other is added.
+}
+(\textbf{AP}) \textit{Agreement. If $(\mathcal{B}) \cap (\mathcal{C}) \neq \emptyset$ then $(\mathcal{B}) \cap (\mathcal{C}) = (\mathcal{B} \cup \mathcal{C})$.}
 
-(\textbf{AP}) Agreement. If $(\mathcal{B}) \cap (\mathcal{C}) \neq \emptyset$ then $(\mathcal{B}) \cap (\mathcal{C}) = (\mathcal{B} \cup \mathcal{C})$.
+\textit{This property states that the intersection of the merging results of two distinct sets of knowledge bases is not empty, it should be similar to the merging of all PKBs in those two sets.
+}
+(\textbf{DP}) \textit{Disagreement Principle. If $\cap^m_{i=1}\Omega(\mathcal{K}'_i) \neq \emptyset$ and $\exists \mathcal{K}_1 \in \mathcal{B}, \mathcal{K}_2 \in \mathcal{C}: \mathcal{K}_1 \nparallel \mathcal{K}_2$ then $\Gamma(\mathcal{B} \cap \Gamma(\mathcal{C}) \neq \emptyset$.}
 
-This property states that the intersection of the merging results of two distinct sets of knowledge bases is not empty, it should be similar to the merging of all PKBs in those two sets.
+\textit{This property states that if the merged PKBs in $\mathcal{B}$ is inconsistent with merged PKBs in $\mathcal{C}$ of a distinct set of knowledge bases and PKBs in $\mathcal{C}$ are collectively consistent, the merging results of PKBs in both $\mathcal{B}$ and $\mathcal{C}$ is also inconsistent with $\mathcal{B}$. 
+}
+(\textbf{SDP}) \textit{Strong Disagreement Principle. $\Gamma(\mathcal{B}) \cap \Gamma(\mathcal{C}) = \emptyset$.}
 
-(\textbf{DP}) Disagreement Principle. If $\cap^m_{i=1}\Omega(\mathcal{K}'_i) \neq \emptyset$ and $\exists \mathcal{K}_1 \in \mathcal{B}, \mathcal{K}_2 \in \mathcal{C}: \mathcal{K}_1 \nparallel \mathcal{K}_2$ then $\Gamma(\mathcal{B} \cap \Gamma(\mathcal{C}) \neq \emptyset$.
-
-This property states that if the merged PKBs in $\mathcal{B}$ is inconsistent with merged PKBs in $\mathcal{C}$ of a distinct set of knowledge bases and PKBs in $\mathcal{C}$ are collectively consistent, the merging results of PKBs in both $\mathcal{B}$ and $\mathcal{C}$ is also inconsistent with $\mathcal{B}$. 
-
-(\textbf{SDP}) Strong Disagreement Principle. $\Gamma(\mathcal{B}) \cap \Gamma(\mathcal{C}) = \emptyset$.
-
-This property states that the intersection of the merging results should be empty.
-
+\textit{This property states that the intersection of the merging results should be empty.
+}
 \subsection{Satisfied probabilistic functions}
 
 \textbf{Definition 8}. Function $\varphi(H,\Theta)$ is called an indicator function whenever it is defined as follows:
 
-$\varphi : \hat{\varepsilon} \times \Lambda(\hat{\varepsilon}) \to R_{[0,1]}$,
+$\varphi : \hat{\varepsilon} \times \Lambda(\hat{\varepsilon}) \to \mathbb{R}_{[0,1]}$,
 
 where $$\varphi(H,\Theta) =
 \begin{cases}
@@ -257,18 +268,18 @@ Proposition 6 is the result of Proposition 5 which was proposed and proved in [2
 
 For any $x \in \hat{\mathcal{P}}(\hat{\varepsilon}), y \in \hat{\mathcal{P}}(\hat{\varepsilon})$, it is said that $x$ dominates $y$, denoted by $x >> y, if x_i = 0$ implies $y_i = 0 \forall 1 \le i \le m$. Let $I(X) = {i : x_i \neq 0}$. 
 
-\textbf{Definition 11}. For a set of probability functions $\hat{\mathcal{P}} (\hat{\varepsilon})$, a divergence distance function, is a map $d : \hat{\mathcal{P}} (\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to R_{\geq0}$ satisfiying the following conditions: 
+\textbf{Definition 11}. For a set of probability functions $\hat{\mathcal{P}} (\hat{\varepsilon})$, a divergence distance function, is a map $d : \hat{\mathcal{P}} (\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to \mathbb{R}_{\geq0}$ satisfiying the following conditions: 
 1. $d(x,$ y$) = 0 iff x = y$ 
 2. $d(x, y) \geq 0$
 3. $d(x, y) + d(y, z)\ge0, d(x, z) = 0$
 
 where $x$, $y$, and $z$ are probability functions. 
 
-\textbf{Definition 12}. Function $d^{SQ}(x, y)$ is called a SQ divergence distance function whenever it is defined as follows: $d^{SQ} : \hat{\mathcal{P}} (\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to R_{\geq0}$, $d^{SQ}(x, y) = \sum_{i \in I(y)} (x_i - y_i)^2$
+\textbf{Definition 12}. Function $d^{SQ}(x, y)$ is called a SQ divergence distance function whenever it is defined as follows: $d^{SQ} : \hat{\mathcal{P}} (\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to \mathbb{R}_{\geq0}$, $d^{SQ}(x, y) = \sum_{i \in I(y)} (x_i - y_i)^2$
 
 \textbf{Definition 13}. Function $d^{RB}(x, y)$ is called a Renyi-B divergence distance function whenever it is defined as follows: $d^{RB} : \hat{\mathcal{P}}(\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to \mathbb{R}_{\ge 0}$, $d^{RB}(x, y)=\sum_{i\in I(y)}[(x_i)^r - (y_i)^r - r(x_i - y_i)^r(y_i)^{r-1}]$ for $1 < r \le 2$
  
-\textbf{Definition 14}. Function $d^{KL}(x, y)$ is called a KL divergence distance function whenever it is defined as follows: $d^{KL} : \hat{\mathcal{P}} (\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to R_{\geq0}$, $$d^{KL}(x, y) =
+\textbf{Definition 14}. Function $d^{KL}(x, y)$ is called a KL divergence distance function whenever it is defined as follows: $d^{KL} : \hat{\mathcal{P}} (\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to \mathbb{R}_{\geq0}$, $$d^{KL}(x, y) =
 \begin{cases}
 	\sum_{i \in I(y)} {x_i \log{\frac{x_i}{y_i}}} &text{if} y >> x \\
 	+\infty 	&text{otherwise}
@@ -283,18 +294,15 @@ $\arg \min_{\vec{y}^{SQ}\mathcal{B} \in R^n}\left( \sum^n_{i=1} d^{SQ}(x_i, y) :
 
 subject to $\sum^n_{i=1}y_i = 1;\vec{y}^{SQ}_\mathcal{B} \geq \vec{0}$ (15)
 
-\textbf{Proof}. Let $\mathcal{C} = {\vec{y}^{SQ}_\mathcal{B} \in R^n | \sum^n_{i=1}  y_i = 1, \vec{y}^{SQ}_\mathcal{B} \geq \vec{0}}$ be a constraint set. Let $f(\vec{y}^{SQ}_\mathcal{B} ) = \sum^n_{i=1} d^{SQ}(X_i, y)$ be an objective function, where $x_i \in \mho(\mathcal{K}_i)$. Suppose that $y$ is optimal for (14). Then there exists $\vec{y}^{SQ}_\mathcal{B}$ such that $\eta = \sum^n_{i=1} d^{SQ}(x_i, y) and y \in \vec{y}^{SQ}_\mathcal{B} , \vec{y}^{SQ}_\mathcal{B}$ is an optimal point. This leads to $\mathcal{C}$ is nonempty and thus $\vec{y}^{SQ}_\mathcal{B}$ is feasible and attains the optimal value $f^*$ Therefore vector $\vec{y}^{SQ}_\mathcal{B}$ is the optimal solutions of (14)
-
-[25] .
-
-$\square$
-
+\begin{proof}Let $\mathcal{C} = {\vec{y}^{SQ}_\mathcal{B} \in R^n | \sum^n_{i=1}  y_i = 1, \vec{y}^{SQ}_\mathcal{B} \geq \vec{0}}$ be a constraint set. Let $f(\vec{y}^{SQ}_\mathcal{B} ) = \sum^n_{i=1} d^{SQ}(X_i, y)$ be an objective function, where $x_i \in \mho(\mathcal{K}_i)$. Suppose that $y$ is optimal for (14). Then there exists $\vec{y}^{SQ}_\mathcal{B}$ such that $\eta = \sum^n_{i=1} d^{SQ}(x_i, y) and y \in \vec{y}^{SQ}_\mathcal{B} , \vec{y}^{SQ}_\mathcal{B}$ is an optimal point. This leads to $\mathcal{C}$ is nonempty and thus $\vec{y}^{SQ}_\mathcal{B}$ is feasible and attains the optimal value $f^*$ Therefore vector $\vec{y}^{SQ}_\mathcal{B}$ is the optimal solutions of (14) [25] .
+\end{proof}
 \textbf{Definition 15}. (SQ Merging Operator). Function $\Gamma^{SQ} : \mathcal{B} \to \mho (\mathcal{B})$ is called SE Merging Operator whenever it is defined as follows: 
 $\Gamma^{SQ}(\mathcal{B}) = \vec{y}^{SQ}_\mathcal{B}$.
 
 \textbf{Proposition 8}. $\Gamma^{SQ}$ fulfills all properties.
 
-\textbf{Proof}. SCP. Suppose $\vec{y} \in \Gamma^SQ(\mathcal{B})$. By Definition 15, $\vec{y}$ is the optimal value of problem (14) and then there exists $\vec{x} \in \mho(\mathcal{K}_i)$ for $i = 1, ... , n$. Since $\cap^m_{i=1}\mho(\mathcal{K}_i) \neq \emptyset, \vec{y} = \vec{x}$. Therefore, $\vec{y} \in \cap^m_{i=1}\mho(\mathcal{K}_i)$. Suppose $\vec{y} \in \cap^m_{i=1}\mho(\mathcal{K}_i)$. There exists $\vec{y} \in \mho(\mathcal{K}_i)$ for $i = 1, ... , n$. By Proposition 7, $\vec{y} \in \mho\Gamma^{SQ}(\mathcal{B})$.
+\begin{proof}SCP. Suppose $\vec{y} \in \Gamma^SQ(\mathcal{B})$. By Definition 15, $\vec{y}$ is the optimal value of problem (14) and then there exists $\vec{x} \in \mho(\mathcal{K}_i)$ for $i = 1, ... , n$. Since $\cap^m_{i=1}\mho(\mathcal{K}_i) \neq \emptyset, \vec{y} = \vec{x}$. Therefore, $\vec{y} \in \cap^m_{i=1}\mho(\mathcal{K}_i)$. Suppose $\vec{y} \in \cap^m_{i=1}\mho(\mathcal{K}_i)$. There exists $\vec{y} \in \mho(\mathcal{K}_i)$ for $i = 1, ... , n$. By Proposition 7, $\vec{y} \in \mho\Gamma^{SQ}(\mathcal{B})$.
+\end{proof}
 
 CP1. This property is easily result from SCP.
 
@@ -322,8 +330,8 @@ y \in \hat{p}(\hat{\varepsilon}); x_i \in \mho(\mathcal{K}_i);\mathcal{K}_i \in 
 
 subject to $\sum^n_{y=1} y_i= 1; \vec{y}^{RB}_\mathcal{B} \geq \vec{0}$ (17)
 
-\textbf{Proof}. Let $f(\vec{y}^{RB}_\mathcal{B}) = \sum^n_{i=1} d^{RB}(x_i,y)$ be an objective function, where $x_i \in \mho(\mathcal{K}_i)$.
-
+\begin{proof}Let $f(\vec{y}^{RB}_\mathcal{B}) = \sum^n_{i=1} d^{RB}(x_i,y)$ be an objective function, where $x_i \in \mho(\mathcal{K}_i)$.
+\end{proof}
 Let $C = { \vec{y}^{RB}_\mathcal{B} \in mathbb{R}^n|\sum^n_{i=1} y_i = 1, \vec{y}^{RB}_\mathcal{B} \geq \vec{0} }$ be
 a constraint set. Suppose that $\mathcal{Y}$ is optimal for (16).
 Then there exists $\vec{y}^{RB}_\mathcal{B}$ such that $\mathcal{Y} = \sum^n_{i=1} d^{RB}(x_i, y)$
@@ -338,10 +346,10 @@ whenever it is defined as follows: $\Gamma^{RB}(\mathcal{B}) = \vec{y}^{RB}_\mat
 
 \textbf{Proposition 10}. $\Gamma^{RB}$ fulfills all properties.
 
-\textbf{Proof}. The proof for properties of $\Gamma^{RB}$ is similar
+\begin{proof}The proof for properties of $\Gamma^{RB}$ is similar
 to that of $\Gamma^{SQ}$ by using distance function $d^{RB}(x, y)$
 instead of $d^{SQ}(x, y)$.
-
+\end{proof}
 \subsubsection{The probabilistic merging operator $\Gamma^{LE}$}
 
 \textbf{Proposition 11}. Probability merging vector of $\mathcal{B}$,
@@ -351,8 +359,8 @@ y \in \hat{p}(\hat{\varepsilon}); x_i \in \mho(\mathcal{K}_i);\mathcal{K}_i \in 
 
 subject to $\sum^n_{i=1} y_i = 1; \vec{y}^{LE}_\mathcal{B} \geq \vec{0}$ (19)
 
-\textbf{Proof}. Let $f(\vec{y}^{LE}_\mathcal{B} ) = \sum^n_{i=1} d^{KL}(x_i, y)$ be an objective function, where $x_i \in \mho(\mathcal{K}_i)$.
-
+\begin{proof}Let $f(\vec{y}^{LE}_\mathcal{B} ) = \sum^n_{i=1} d^{KL}(x_i, y)$ be an objective function, where $x_i \in \mho(\mathcal{K}_i)$.
+\end{proof}
 Let $C = {\vec{y}^{LE}_\mathcal{B} \in mathbb{R}^n|\sum^n_{i=1} y_i = 1, \vec{y}^{LE}_\mathcal{B} \geq \vec{0} }$ be a
 constraint set. Suppose that y is optimal for (18).
 Then there exists $\vec{y}^{SE}_\mathcal{B}$ such that $y = \sum^n_{i=1} d^{KL}(x_i, y)$
@@ -367,7 +375,7 @@ whenever it is defined as follows: $\Gamma^{LE}(\mathcal{B}) = \vec{y}^{LE}_\mat
 
 \textbf{Proposition 12}. $\Gamma^{LE}$ fulfills CP1, SCP, IP, EP, AP, CP2.
 
-\textbf{Proof}. AP. Firstly, $\Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C}) \subseteq \Gamma^{LE}(\mathcal{B} \cup \mathcal{C})$
+\begin{proof}AP. Firstly, $\Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C}) \subseteq \Gamma^{LE}(\mathcal{B} \cup \mathcal{C})$
 needs to be proven. Since $\Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C}) \neq \emptyset$,
 there is some $\vec{y} \in \Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C})$. For any
 such $\vec{y}$ there exist $\vec{\alpha} = (\alpha_i, ... , \alpha_n) \in \Gamma^{LE}(\mathcal{B})$
@@ -395,6 +403,7 @@ d^{KL}(\beta_i, y) \neq +\infty$ then this would contradict
 the minimality of either $f^*(\vec{y}^SE_\mathcal{B})$ or
 $f^*(\vec{y}^{SE}_mathcal{C} )$. Thus $\vec{y} \in \Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C})$. Therefore,
 $\Gamma^{LE}(\mathcal{B} \cup \mathcal{C}) \subseteq \Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C})$.
+\end{proof}
 The proof for remaining properties of $\Gamma^{LE}$ is similar to that of
 $\Gamma^{SQ}$ by using distance function $d^{SQ}(x, y)$
 instead of $d^{KL}(x, y)$.
@@ -409,7 +418,7 @@ $\arg \min\vec{y}^{SE}_mathcal{B} \in \mathbb{R}^n (
 y \in \hat{p}(\hat{\varepsilon}); x_i \in \mho(\mathcal{K}_i);\mathcal{K}_i \in \mathcal{B}$ (20)
 
 subject to $\sum^n_{i=1} y_i = 1; \vec{y}^{RB}_\mathcal{B}\geq\vec{0}$ (21)
-\textbf{Proof}. Let $\mathcal{C} = {\vec{y}^{SE}_\mathcal{B} \in mathbb{R}^n|\sum^n_{i=1} y_i = 1, \vec{y}^{SE}_mathcal{B}\geq\vec{0}}$ 
+\begin{proof}Let $\mathcal{C} = {\vec{y}^{SE}_\mathcal{B} \in mathbb{R}^n|\sum^n_{i=1} y_i = 1, \vec{y}^{SE}_mathcal{B}\geq\vec{0}}$ 
 be a constraint set. Suppose that $\mathcal{Y}$ is optimal for  
 (20). Let $f(\vec{y}^{SE}_\mathcal{B})= \sum^n_{i=1} d^{KL}(y, x_i)$ be an objective function, 
 where $x_i \in \mho(\mathcal{K}_i)$. Then there exists $\vec{y}^{SE}_mathcal{B}$ 
@@ -418,7 +427,7 @@ an optimal point. This leads to C is nonempty and
 thus $\vec{y}^{SE}_mathcal{B}$ is feasible and attains the optimal value $f^*$. 
 Therefore vector $\vec{y}^SE_\mathcal{B}$ is the optimal solutions of (20) 
 [25]. 
-
+\end{proof}
 \textbf{Definition 18}. (SE Merging Operator). Function 
 $\Gamma^{SE} : \mathcal{B} \to f(\mathcal{B})$ is called SE Merging Operator 
 whenever it is defined as follows: 
@@ -427,7 +436,7 @@ $\Gamma^{SE}(\mathcal{B}) = \vec{y}^{SE}_mathcal{B}$ .
 \textbf{Proposition 14}. 
 $\Gamma^{SE}$ fulfills CP1, SCP, IP, EP, CP2. 
 
-\textbf{Proof}. CP2. Since $\cap^m_{i=1}\mho(\mathcal{K}_i) \neq \emptyset$ it follows that 
+\begin{proof}CP2. Since $\cap^m_{i=1}\mho(\mathcal{K}_i) \neq \emptyset$ it follows that 
 $f^*(\vec{y}^{SE}_mathcal{C} ) = \sum^m_{i=1} d^{KL}(y, \beta_i) = 0 \neq +\infty$. It is sufficient 
 to consider the case when $\sum^m_{i=1} d^{KL}(y, \alpha_j)$ 
 is $+\infty$. However, in this case both $\Gamma^{SE}(\mathcal{B} \cup \mathcal{C})$ and 
@@ -435,7 +444,7 @@ $\Gamma^{SE}(\mathcal{B})$ are equal to $\hat{p}(\hat{\in})$. Therefore, $\Gamma
 \Gamma^{SE}(\mathcal{B})$. The proof for remaining properties of $\Gamma^{SE}$ 
 is similar to that of $\Gamma^{LE}$ by inverting two arguments 
 in distance function $d^{KL}(x, y)$.
-
+\end{proof}
 \subsubsection{The probabilistic merging operator $\Gamma^{HU}$}
 
 Let  $\mathcal{B} = {\mathcal{K}_1, ...,\mathcal{K}_n}$. Let $I_\mathcal{B} = {1, ..., n} $
@@ -449,9 +458,9 @@ $\vec{y}^{HU}_\mathcal{B} = \hat{A}_\mathcal{B}\vec{\lambda}$ (23)
 
 where $\vec{\lambda} = (\lambda_i, ..., \lambda|\mathcal{H}|)^T$
 
-\textbf{Proof}. Let $\mho(\mathcal{K}_1)=\langle \rho_1, ..., \rho_n \rangle;\mho(\mathcal{K}_2)=\langle\zeta_1, ..., \zeta_n \rangle$;
+\begin{proof}Let $\mho(\mathcal{K}_1)=\langle \rho_1, ..., \rho_n \rangle;\mho(\mathcal{K}_2)=\langle\zeta_1, ..., \zeta_n \rangle$;
 $\mho(\mathcal{K}_3) = \langle\rho_1, ..., \rho_n\rangle$
- 
+ \end{proof}
 From Definition 6, it follows that $\mathcal{B} = {\mathcal{K}_1,
 \mathcal{K}_2,\mathcal{K}_3}$. From (22), $\mathcal{H} = {\mho_1,\mho_2}$, showing clearly
 that
@@ -487,13 +496,13 @@ whenever it is defined as follows: $\Gamma^{HU}(\mathcal{B}) = \vec{y}^{HU}_\mat
 
 \textbf{Proposition 16}. $\Gamma^{HU}$ fulfills CP1, SCP, IP, EP, and CP2.
  
-\textbf{Proof}. SCP: Suppose $\vec{y}  \in \Gamma^{HU}(\mathcal{B})$. By Definition
+\begin{proof}SCP: Suppose $\vec{y}  \in \Gamma^{HU}(\mathcal{B})$. By Definition
 19, $\vec{y} \in \widehat{A}_\mathcal{B}\vec{\lambda} since \cap^m_{i=1}\mho(\mathcal{K}_i) \neq \emptyset$ and thus $\vec{y} \in 
 \cap^m_{i=1}\mho(\mathcal{K}_i)$. Suppose $\vec{y} \in \cap^m_{i=1}\mho(\mathcal{K}_i)$. There exists
 $\vec{y} \in \mho(\mathcal{K}_i)$ for $i = 1, ... , n$. By Proposition 15, $\vec{y} \in 
 \Gamma^{HU}(\mathcal{B})$. CP1: This property is an easy result from
  SCP. 
- 
+ \end{proof}
 IP and EP. Follows from Definition 19. CP2: Iff $\mho \in 
 \mathcal{H}$ then $\mho \subseteq \Gamma^{HU}(\mathcal{B}) \subseteq \cap^m_{i=1}\mho(\mathcal{K}'_i)$. So $\Gamma^{HU}(\mathcal{B} \cup \mathcal{C})$
 is also the convex hull of all the sets from $\mathcal{H}$. Therefore, 
@@ -601,7 +610,7 @@ The following propositions provide some assessments of the complexity of the alg
 \textbf{Proposition 17}. The computational complexity of the
 SM1 algorithm is $\mathcal{O}(|\mathcal{K}|^3 + |\mathcal{K}| |\Lambda(\hat{\varepsilon} )|)$.
 
-\textbf{Proof}. In the first stage, the cost can be done in
+\begin{proof}In the first stage, the cost can be done in
 $\mathcal{O}(|\Lambda(\hat{\varepsilon})| |\mathcal{K}|)$. In the second stage, by Propositions
 2 as the objective and constraint functions of problems
 are linear, computing $\vec{\vartheta}^1_\mathcal{K}$, based on the Simplex
@@ -610,16 +619,15 @@ be done in $\mathcal{O}(|\mathcal{K}|^3 + |\mathcal{K}| |\Lambda(\hat{\varepsilo
 complexity of the SM1 is
 
 $\mathcal{O}(|\mathcal{K}|3 + |\mathcal{K}| |\Lambda(\hat{\varepsilon})|)$
-
+\end{proof}
 \textbf{Proposition 18}. The computational complexity of the
 SM2 algorithm is $\mathcal{O}(|\mathcal{K}|3 + |\mathcal{K}| |\Lambda(\hat{\varepsilon})|)$.
 
-\textbf{Proof}. Proposition 17 and 18 are similar in proof.
-
+\begin{proof}Proposition 17 and 18 are similar in proof.
+\end{proof}
 \textbf{Proposition 19}. The computational complexity of the
 SM3 algorithm is $\mathcal{O}(\max{|\Lambda(\hat{\varepsilon} )| |\mathcal{K}|,N_{SM3}})$.
-
-\textbf{Proof}. In the first stage, the cost can be done in
+\begin{proof}In the first stage, the cost can be done in
 $\mathcal{O}(|\Lambda(\hat{\varepsilon})| |\mathcal{K}|)$. In the second stage, by Proposition
 2, as the objective functions of problems are not
 linear, computing $\vec{\vartheta}^p\_mathcal{K}$
@@ -637,18 +645,18 @@ and thus the cost for computing $\vec{\vartheta}^p_\mathcal{K}$ can be done
 in. $\mathcal{O}(N_{SM3})$ Therefore, the cost of the SM3 is
 
 $\mathcal{O}(max\{|\Lambda(\hat{\varepsilon})| |\mathcal{K}|,N_{SM3}\})$.
-
+\end{proof}
 \textbf{Proposition 20}. The computational complexity of the
 SM4 algorithm is $\mathcal{O}(max\{2|\mathcal{K}|^2,N_{SM4}\})$
 
-\textbf{Proof}. In the first stage, the cost can be done in
+\begin{proof}In the first stage, the cost can be done in
 $\mathcal{O}(2 |\mathcal{K}|^2)$. In the second stage, by Proposition 5, as
 the constraint functions of problems are not linear,
 computing $\vec{\vartheta}^u_\mathcal{K}$
 based on the interior-point algorithm
 proposed in [29]. By (24)–(25) and (9), it follows that
 $f_0\left(\vec{\vartheta}\right) = \sum^h_{i=1}(\ell_i + \zeta_i),Q = (1, ... , 1)$. 
-
+\end{proof}
 By (26), $\nabla \Phi \left( \vec{\vartheta} \right) = \sum^{3|\mathcal{K}|+|\Lambda(\hat{\varepsilon})|}_{i=1} \frac{1}{-f_i\left(\vec{\vartheta}\right)} \nabla f_i \left( \vec{\vartheta} \right)$
 
 $t^{(0)}_{SM4}$ is the value that minimizes
@@ -745,7 +753,7 @@ SQMA algorithm is $\mathcal{O}(\max\{n \bar{N}, n|\Lambda(\hat{\varepsilon})|,N_
 \end{algorithmic}
 \end{algorithm}
 
-\textbf{Proof}. The cost of SQMA depends on two stages. In
+\begin{proof}The cost of SQMA depends on two stages. In
 the first stage, the cost is $\mathcal{O}(n\bar N)$; where $\bar N \approx \bar N_{SM1}$, or $\bar N \approx \bar N_{SM2}$, or $\bar N \approx \bar N_{SM3}$, or $\bar N \approx \bar N_{SM4}$. In the
 second stage, the cost for building SQ divergence distance
 functions is $\mathcal{O}(n |\Lambda(\hat{\varepsilon})|)$; the cost for building
@@ -760,7 +768,7 @@ and
 thus $t^{(0)}_{SQMA}$ is the value that minimizes
 
 $\inf_g\parallel t\nabla f_0 \left( \vec{y}^{SQ^{(0)}}_\mathcal{B} \right) +\nabla \Phi \left( \vec{y}^{SQ^{(0)}}_\mathcal{B} \right) + Q^T g \parallel_2$
-
+\end{proof}
 By (28) and (14),
 
 $N_{SQMA} =  \frac{ \log^{\frac{|\Lambda(\hat{\varepsilon})|}{(0)}}_{t_{SQMA} \in}}{log\mu}  \left( \frac{|\Lambda(\hat{\varepsilon})| (\mu - 1 - log\mu)}{\gamma} + c \right)$
@@ -771,17 +779,17 @@ $\mathcal{O}(\max\{n \bar N, n |\Lambda(\hat{\varepsilon})|,N_{SQMA}\})$
 
 \textbf{Proposition 22}. The computational complexity of the RBMA algorithm is $\mathcal{O}(max\{n \bar N, n |\Lambda(\hat{\varepsilon})|,N_{RBMA}\})$.
 
-\textbf{Proof}. Proposition 22 and 21 are similar in proof. 
-
+\begin{proof}Proposition 22 and 21 are similar in proof. 
+\end{proof}
 \textbf{Proposition 23}. The computational complexity of the LEMA algorithm is $\mathcal{O}(max{n \bar N, n |\Lambda(\hat{\varepsilon})|,N_{LEMA}})$
 
-\textbf{Proof}. Proposition 23 and 21 are similar in proof.
-
+\begin{proof}Proposition 23 and 21 are similar in proof.
+\end{proof}
 \textbf{Proposition 24}. The computational complexity of the
 SEMA algorithm is $\mathcal{O}(max{n \bar N, n |\Lambda(\hat{\varepsilon})|,N_{SEMA}})$.
 
-\textbf{Proof}. Proposition 24 and 21 are similar in proof.
-
+\begin{proof}Proposition 24 and 21 are similar in proof.
+\end{proof}
 \begin{algorithm}
 \caption{The PCVA algorithm}
 \begin{algorithmic}[1]
@@ -801,20 +809,22 @@ SEMA algorithm is $\mathcal{O}(max{n \bar N, n |\Lambda(\hat{\varepsilon})|,N_{S
 \textbf{Proposition 25}. The computational complexity of the
 HULL algorithm is $\mathcal{O}(\max{\bar N, |\mathcal{H}^2})$.
 
-\textbf{Proof}. In the first stage, the cost depends on employing algorithm finding a set of probability function
+\begin{proof}In the first stage, the cost depends on employing algorithm finding a set of probability function
 values satisfying $\mathcal{K}_1 \in \mathcal{B}$, denoted by $\bar N$ . In the
 second stage, the cost for generating vector $\vec{\lambda}$ is
 $\mathcal{O}(|\mathcal{H}|^2)$, the cost for computing $\hat{A}_\mathcal{B}\vec{\lambda}$ is $\mathcal{O}(|\mathcal{H}|)$.
 
 Therefore, the cost is $\mathcal{O}(max\{\bar N|\mathcal{H}^2\})$.
-
+\end{proof}
 \subsection{Algorithm for computing new probability value of constraints}
 
 \textbf{The PVCA algorithm}. It describes the process of computing new probability value of constraints in merged knowledge base. It consists of two stages, (i) computing new probability value of constraints having form (F)[$\rho$ ], and (ii) computing new probability value of constraints having form (F|G)[$\rho$]. It originates from Proposition 1.
 
 \textbf{Proposition 26}. The computational complexity of PCVA algorithm is $\mathcal{O}(|\vec{y} |)$.
 
-\textbf{Proof}. It is easy to prove. 
+\begin{proof}
+It is easy to prove. 
+\end{proof}
 
 By using algorithm for finding probability merging vector, distance-based merging algorithms, and algorithm for computing new probability value of constraints, a common consistent PKB can be obtained from a PKB profile. The process of merging PKB is presented in Fig. 1.
 
@@ -833,9 +843,10 @@ Table 1 shows these values when the SQMA, LEMA, SEMA are employed while Table 2 
 
 The detail for explaining the merging process and evaluating algorithms in this paper can be found in an online appendix \footnote{https://vtn82.blogspot.com/2019/04/jifs.html}
 
-Table 1: Original PKBs and merged knowledge bases for algorithms SQMA, LEMA, and SEMA
+
 
 \begin{table*}
+\caption{Original PKBs and merged knowledge bases for algorithms SQMA, LEMA, and SEMA}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
 $\kappa$ & $\mathcal{K}_1$ & $\mathcal{K}_2$ & $\mathcal{K}_3$ & $\mathcal{K}_4$ & $\mathcal{K}_5$ & SQMA & LEMA & SEMA\\
@@ -849,12 +860,11 @@ $\kappa$ & $\mathcal{K}_1$ & $\mathcal{K}_2$ & $\mathcal{K}_3$ & $\mathcal{K}_4$
 \end{tabular}
 \end{table*}
 
-Table 2: Merged knowledge bases for algorithms RBMA and HULL
-
-\begin{table*}
+\begin{table*}[htb]
+\caption{Merged knowledge bases for algorithms RBMA and HULL}
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
 \hline
-\multirow{3}{3em}{$\kappa$} & \multicolumn{3}{|c|}{RBMA} & \multicolumn{3}{|c|}{HULL}\\
+{$\kappa$} & \multicolumn{3}{|c|}{RBMA} & \multicolumn{3}{|c|}{HULL}\\
 \hline
 \multicolumn{3}{|c|}{r} & \multicolumn{3}{|c|}{$\vec{\lambda}$}\\
 \hline
