@@ -1,31 +1,21 @@
-\pdfoutput=1
-\documentclass[10pt,a4paper]{IOS-Book-Article}
-\usepackage{authblk}
-\usepackage{mathptmx}
-% \usepackage[hyperref]{emnlp2021}
-\usepackage{times}
-\usepackage{latexsym}
+\documentclass[]{iosart2c}
+\makeatletter\if@twocolumn\PassOptionsToPackage{switch}{}\else\fi\makeatother
+
+\usepackage{amsmath,tabulary,graphicx,times,caption,fancyhdr}
+\usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc}
+
+% \usepackage{latexsym}
 \usepackage{mathtools, amssymb, amsfonts, amsmath}
-\usepackage[T1]{fontenc}
-\usepackage[utf8x]{inputenc}
-\usepackage{microtype}
+% \usepackage{microtype}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage{multirow}
 
-% \renewcommand{\algorithmicrequire}{Input:}
-% \renewcommand{\algorithmicensure}{Output:}
-
-% \renewcommand{\UrlFont}{\ttfamily\small}
-% \newcommand\BibTeX{B\textsc{ib}\TeX}
-% \bibliographystyle{acl_natbib}
-
-
-\renewcommand\Authands{ and }
+\renewcommand{\algorithmicrequire}{Input:}
+\renewcommand{\algorithmicensure}{Output:}
 
 \begin{document}
-
-
 \begin{frontmatter}              % The preamble begins here.
 
 %\pretitle{Pretitle}
@@ -36,10 +26,10 @@ probabilistic knowledge bases}
 \runningtitle{V.T. Nguyen et al. / A distance-based approach for merging probabilistic knowledge bases}
 %\subtitle{Subtitle}
 
-\author[A,C]{\fnms{Van Tham} \snms{Nguyen}}
-\author[B,D]{\fnms{Ngoc Thanh} \snms{Nguyen}}
+\author[A,C]{\fnms{Van Tham} \snm{Nguyen}},
+\author[B,D]{\fnms{Ngoc Thanh} \snm{Nguyen}}
 and
-\author[A]{\fnms{Trong Hieu} \smns{Tran}%
+\author[A]{\fnms{Trong Hieu} \snm{Tran}%
 \thanks{Corresponding author. Trong Hieu Tran, Faculty of Information Technology, Nguyen Tat Thanh University, Ho Chi Minh city, Vietnam. hieutt@vnu.edu.vn}}
 
 \runningauthor{V.T. Nguyen et al.}
@@ -49,8 +39,6 @@ and
 \address[C]{Faculty of Information Technology, Namdinh University of Technology Education, Vietnam}
 \address[D]{Faculty of Information Technology, Nguyen Tat Thanh University, Ho Chi Minh city, Vietnam}
 
-
-
 \begin{abstract}
 In the stages of development of probabilistic expert systems, knowledge merging is a major concern. To deal with knowledge merging problems, several approaches have been put forward. However, in the proposed models, each original probabilistic knowledge base (PKB) is represented by a set of probabilistic functions fulfilling such knowledge base. The drawbacks of the solutions are that the output of model is also a set of probabilistic functions satisfying the resulting PKB and there is no algorithm for implementing the merging process of PKBs in which each of them consists of probabilistic constraints. In this paper, distance-based approach is utilized to propose a new method of merging PKBs to ensure that both the input and output of methods are represented by sets of probabilistic constraints. To this aim, the relationship between the probability rules and the probabilistic constraints, and the several transformation methods for the representation of the original PKB are presented, a set of merging operators (MOs) is proposed, and several desirable logical properties are investigated and discussed. Several algorithms for merging PKBs are presented and the computational complexities of these algorithms are also analyzed and evaluated
 
@@ -59,7 +47,11 @@ In the stages of development of probabilistic expert systems, knowledge merging 
 \begin{keyword}
 Probabilistic knowledge base, knowledge merging, merging operator, algorithm
 \end{keyword}
+
 \end{frontmatter}
+
+\thispagestyle{empty}
+\pagestyle{empty}
 
 \section{Introduction}
 Improving appropriate methods to build and maintain the action of knowledge-based systems is very necessary. In security systems, advanced methods of symbolic knowledge representation are used to integrate different, distributed source of information and in this way to make a system be flexible and more effective [1]. It is necessary to transform information stored in knowledge bases when two computer systems need to be integrated or when they exchange content of their knowledge bases [2]. In order to ensure that systems could interact with each other, the knowledge bases originating from these systems have to be consistent. Knowledge merging could be understood as a process of creating a consistent knowledge from a set of knowledge bases deriving from different systems [3]. Knowledge merging is an important problem and its applications are many and diverse. The process of merging could require that knowledge bases should change to ensure the consistency of the merged knowledge base. Therefore, it is a difficult problem and considering these changes is very essential. Knowledge merging could be observed in two respects: Merging knowledge bases which are not similar and merging a set of different representations for same knowledge base but different in representing degree [3]. Therefore, the first task in the knowledge merging process is to solve the inconsistency in knowledge bases. A data filling approach for incomplete set in which missing data is filled in terms of the probability of objects appearing in the mapping sets of parameters could find in [4]. A class of basic inconsistency measures for probabilistic framework has been introduced in [5, 6]. In a probabilistic environment, some strategies have been developed to deal with the inconsistency of a knowledge base. The method of modification of probabilities is one of the most common approaches. This method has been applied in [7–10].
@@ -106,7 +98,7 @@ Let $\hat{\mathcal{P}} (\hat  \varepsilon )$ be a set of all probability functio
 
 (\textbf{P3}) $\mathcal{P}(F) = \sum_{i=1}^{n} {\mathcal{P}(G_i)\mathcal{P}(F|G_i)}$
 
-(\textbf{P4}) $\mathcal{P}(F) = 1 − \mathcal{P}(\overline F)$
+(\textbf{P4}) $\mathcal{P}(F) = 1 - \mathcal{P}(\overline F)$
 
 \textit{Any countable sequence of disjoint sets (synonymous with mutually exclusive events) $F_1, F_2, ... F_n$ satisfies}
 
@@ -196,7 +188,7 @@ $$
 A_\mathcal{K} = (a_{ij}) \in R^{h \times m}
 $$
 where
-$a_{ij} = \varphi(F_i \cap G_i,\Theta_j)(1 − \rho_i) − \varphi(\cap G_i,\Theta_i)\rho_i$
+$a_{ij} = \varphi(F_i \cap G_i,\Theta_j)(1 - \rho_i) - \varphi(\cap G_i,\Theta_i)\rho_i$
 
 Intuitively, $a_{ij}$ is either $1-\rho$, $-\rho$ or 0 dependent on whether $F_i \cap G_i$ satisfies $\Theta_j, F_i \cap G_i$ satisfies $\Theta_j$, or not computable. 
 
@@ -208,21 +200,21 @@ subject to : $\sum^m_{i=1}\vartheta_i = 1; \vec{\vartheta}\geq\vec{0}$ (2)
 
 Proposition 2 is the result of Proposition 4 which was proposed and proved in [10]. 
 
-\textbf{Proposition 3}. 1-norm satisfied probabilistic vector of $\mathcal{K}$, denoted by $\vec{\mathcal{V}}^1_\mathcal{K}$, corresponding to $\vec{\vartheta}^∗$ of the optimal solution of the following linear programming problem:
+\textbf{Proposition 3}. 1-norm satisfied probabilistic vector of $\mathcal{K}$, denoted by $\vec{\mathcal{V}}^1_\mathcal{K}$, corresponding to $\vec{\vartheta}^*$ of the optimal solution of the following linear programming problem:
 
 $\arg \min _{(\vec{\vartheta},\vec{\lambda}) \in R^{m+h}} \sum^h_{i=1}\lambda_i$(3)
 
-subject to : $A_\mathcal{K} \vec{\vartheta} − \vec{\lambda} \le \vec{0}; A_\mathcal{K}\vec{\vartheta} + \vec{\lambda}\geq\vec{0}$ (4)
+subject to : $A_\mathcal{K} \vec{\vartheta} - \vec{\lambda} \le \vec{0}; A_\mathcal{K}\vec{\vartheta} + \vec{\lambda}\geq\vec{0}$ (4)
 
 $\sum^m_{i=1} \vartheta_i = 1; \vec{\vartheta}\geq\vec{0}  	\vec{\lambda}\geq \vec{0}$ (5)
 
 Proposition 3 is the result of Proposition 5 which was proposed and proved in [10].
 
-\textbf{Proposition 4}.$\infty$-norm satisfied probabilistic vector of $\mathcal{K}$, denoted by $\vec{\vartheta}^\infty_\mathcal{K}$ , corresponding to $\vec{\vartheta}^∗$ of the optimal solution of the following linear programming problem:
+\textbf{Proposition 4}.$\infty$-norm satisfied probabilistic vector of $\mathcal{K}$, denoted by $\vec{\vartheta}^\infty_\mathcal{K}$ , corresponding to $\vec{\vartheta}^*$ of the optimal solution of the following linear programming problem:
 
 $\arg \min(\vec{\vartheta},\vec{\lambda}) \in R^{m+1}\lambda$ (6)
 
-subject to : $A_\mathcal{K}\vec{\vartheta} −\vec{1}\lambda \le \vec{0}; A_\mathcal{K}\vec{\vartheta} +\vec{1}\lambda \geq \vec{0}$ (7)
+subject to : $A_\mathcal{K}\vec{\vartheta} -\vec{1}\lambda \le \vec{0}; A_\mathcal{K}\vec{\vartheta} +\vec{1}\lambda \geq \vec{0}$ (7)
 
 $\sum^m_{i=1} \vartheta_i = 1; \vec{\vartheta}\geq\vec{0}; \lambda\geq 0$ (8)
 
@@ -237,23 +229,23 @@ where
 $$\overline{a}_{ij} =
 \begin{cases}
  1		&\text{if $i = j$ and $i, j = 1, ... , h$}\\
- −1 	&\text{if $j − i = h$ and $j = h + 1, ... , 2h$}\\
+ -1 	&\text{if $j - i = h$ and $j = h + 1, ... , 2h$}\\
  0 		&\text{otherwise}
 \end{cases}
 $$
 Let $\vec{\Delta}(\vec{\ell},\vec{\zeta)} = (\ell_1, ..., \ell_h, \zeta_1, ...\zeta_h)^T$ be a column vector.
 
-\textbf{Proposition 5}. Unnormalized satisfied probability vector of $\mathcal{K}$, denoted by $\vec{\vartheta}^u_\mathcal{K}$, corresponding to $\vec{\vartheta}^∗$ of the optimal solution of the following optimization problem:
+\textbf{Proposition 5}. Unnormalized satisfied probability vector of $\mathcal{K}$, denoted by $\vec{\vartheta}^u_\mathcal{K}$, corresponding to $\vec{\vartheta}^*$ of the optimal solution of the following optimization problem:
 
 $\arg \min(\vec{\vartheta},\vec{\lambda})\in R^{m \times 2h}\sum^h_{i=1}(\ell_i + \zeta_i)$ (9)
 
-subject to : $\vec{A}_\mathcal{K} \vec{\Delta} \le \vec{1} − \vec{\rho}$ (10)
+subject to : $\vec{A}_\mathcal{K} \vec{\Delta} \le \vec{1} - \vec{\rho}$ (10)
 
-$\vec{A}_\mathcal{K} \vec\Delta\geq −\vec{\rho}$ (11)
+$\vec{A}_\mathcal{K} \vec\Delta\geq -\vec{\rho}$ (11)
 
 $\sum^m_{i=1} \vartheta = 1;\vec{\vartheta}\geq\vec{0}$ (12)
 
-$(\rho_i + \ell_i − \zeta_i)\sum_{\Theta \in \cup(F_i \cap G_i)\vartheta_i} − \sum_{\Theta\in\cup(G_i)^\vartheta_i=0}$ (13)
+$(\rho_i + \ell_i - \zeta_i)\sum_{\Theta \in \cup(F_i \cap G_i)\vartheta_i} - \sum_{\Theta\in\cup(G_i)^\vartheta_i=0}$ (13)
 
 Proposition 5 is the result of Proposition 9 which  was proposed and proved in [10].
 
@@ -272,9 +264,9 @@ For any $x \in \hat{\mathcal{P}}(\hat{\varepsilon}), y \in \hat{\mathcal{P}}(\ha
 
 where $x$, $y$, and $z$ are probability functions. 
 
-\textbf{Definition 12}. Function $d^{SQ}(x, y)$ is called a SQ divergence distance function whenever it is defined as follows: $d^{SQ} : \hat{\mathcal{P}} (\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to R_{\geq0}$, $d^{SQ}(x, y) = \sum_{i \in I(y)} (x_i − y_i)^2$
+\textbf{Definition 12}. Function $d^{SQ}(x, y)$ is called a SQ divergence distance function whenever it is defined as follows: $d^{SQ} : \hat{\mathcal{P}} (\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to R_{\geq0}$, $d^{SQ}(x, y) = \sum_{i \in I(y)} (x_i - y_i)^2$
 
-\textbf{Definition 13}. Function $d^{RB}(x, y)$ is called a Renyi-B divergence distance function whenever it is defined as follows: $d^{RB} : \hat{\mathcal{P}}(\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to \mathbb{R}_{\ge 0}$, $d^{RB}(x, y)=\sum_{i\in I(y)}[(x_i)^r − (y_i)^r − r(x_i − y_i)^r(y_i)^{r−1}]$ for $1 < r \le 2$
+\textbf{Definition 13}. Function $d^{RB}(x, y)$ is called a Renyi-B divergence distance function whenever it is defined as follows: $d^{RB} : \hat{\mathcal{P}}(\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to \mathbb{R}_{\ge 0}$, $d^{RB}(x, y)=\sum_{i\in I(y)}[(x_i)^r - (y_i)^r - r(x_i - y_i)^r(y_i)^{r-1}]$ for $1 < r \le 2$
  
 \textbf{Definition 14}. Function $d^{KL}(x, y)$ is called a KL divergence distance function whenever it is defined as follows: $d^{KL} : \hat{\mathcal{P}} (\hat{\varepsilon}) \times \hat{\mathcal{P}} (\hat{\varepsilon}) \to R_{\geq0}$, $$d^{KL}(x, y) =
 \begin{cases}
@@ -291,7 +283,7 @@ $\arg \min_{\vec{y}^{SQ}\mathcal{B} \in R^n}\left( \sum^n_{i=1} d^{SQ}(x_i, y) :
 
 subject to $\sum^n_{i=1}y_i = 1;\vec{y}^{SQ}_\mathcal{B} \geq \vec{0}$ (15)
 
-\textbf{Proof}. Let $\mathcal{C} = {\vec{y}^{SQ}_\mathcal{B} \in R^n | \sum^n_{i=1}  y_i = 1, \vec{y}^{SQ}_\mathcal{B} \geq \vec{0}}$ be a constraint set. Let $f(\vec{y}^{SQ}_\mathcal{B} ) = \sum^n_{i=1} d^{SQ}(X_i, y)$ be an objective function, where $x_i \in \mho(\mathcal{K}_i)$. Suppose that $y$ is optimal for (14). Then there exists $\vec{y}^{SQ}_\mathcal{B}$ such that $\eta = \sum^n_{i=1} d^{SQ}(x_i, y) and y \in \vec{y}^{SQ}_\mathcal{B} , \vec{y}^{SQ}_\mathcal{B}$ is an optimal point. This leads to $\mathcal{C}$ is nonempty and thus $\vec{y}^{SQ}_\mathcal{B}$ is feasible and attains the optimal value $f^∗$ Therefore vector $\vec{y}^{SQ}_\mathcal{B}$ is the optimal solutions of (14)
+\textbf{Proof}. Let $\mathcal{C} = {\vec{y}^{SQ}_\mathcal{B} \in R^n | \sum^n_{i=1}  y_i = 1, \vec{y}^{SQ}_\mathcal{B} \geq \vec{0}}$ be a constraint set. Let $f(\vec{y}^{SQ}_\mathcal{B} ) = \sum^n_{i=1} d^{SQ}(X_i, y)$ be an objective function, where $x_i \in \mho(\mathcal{K}_i)$. Suppose that $y$ is optimal for (14). Then there exists $\vec{y}^{SQ}_\mathcal{B}$ such that $\eta = \sum^n_{i=1} d^{SQ}(x_i, y) and y \in \vec{y}^{SQ}_\mathcal{B} , \vec{y}^{SQ}_\mathcal{B}$ is an optimal point. This leads to $\mathcal{C}$ is nonempty and thus $\vec{y}^{SQ}_\mathcal{B}$ is feasible and attains the optimal value $f^*$ Therefore vector $\vec{y}^{SQ}_\mathcal{B}$ is the optimal solutions of (14)
 
 [25] .
 
@@ -308,9 +300,9 @@ CP1. This property is easily result from SCP.
 
 IP and EP. Follows from Definition 15
 
-AP. Firstly, $\Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C}) \subseteq \Gamma^{SQ}(\mathcal{B} \cup \mathcal{C})$ needs to be proven. Since $\Gamma^{SQ}(\mathcal{B})$,$\cap\Gamma^{SQ}(\mathcal{C}) \neq \emptyset$, there is some $\vec{y} = \Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C})$. For any such $\vec{y}$ there exist $\vec{\alpha} = (\alpha_i, ... \alpha_n) \in \Gamma^{SQ}(\mathcal{B})$ and $\vec{\beta}= (\beta_i, ... , \beta_m) \in \Gamma^{SQ}(\mathcal{C})$. By Proposition 7, $f^∗(\vec{y}^{SQ}_\mathcal{B})$ is the optimal value of problem (14), where $f(\vec{y}^{SQ}_\mathcal{B} ) = \sum^n_{i=1} d^{SQ}(a_i, y), \alpha_i \in mho(\mathcal{K}_i)$. $f^∗(\vec{y}^{SQ}_\mathcal{C} )$ is the optimal value of problem (14), where $f (\vec{y}^{SQ}_\mathcal{C} ) = \sum^m_{i=1} d^{SQ}(\beta_i, y), \beta_i \in \mho(\mathcal{K}'_i), y \in \hat{\mathcal{P}} {\hat{\varepsilon}}$. It follows that $f^∗(\vec{y}^{SQ} \mathcal{B} ) + f^∗(\vec{y}^{SQ}_\mathcal{C} ) \le f^∗(\vec{y}^{SQ}_{\mathcal{B}\cup\mathcal{C})}$ and the same $\vec{y}, \vec{\alpha}, \vec{\beta}$ globally minimize the sum $\sum^n_{i=1} d^{SQ}(a_i, y) +\sum^m_{i=1} d^{SQ}(\beta_i, y)$ subject to $\alpha_i \in \mho(\mathcal{K}_i), 1 \le i \le n$ and $\beta_i \in \mho(\mathcal{K}_i), 1 \le i \le m$. Thus $\vec{y} \in \Gamma^{SQ}(\mathcal{B} \cup \mathcal{C})$ and $f^∗\vec{y}^{SQ}_\mathcal{B} + f^∗\vec{y}^{SQ}_\mathcal{C} = f^∗(\vec{y}^{SQ}_{\mathcal{B}\cup\mathcal{C}})$. Therefore, $\Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C}) \subseteq \Gamma^{SQ}(\mathcal{B} \cup \mathcal{C})$
+AP. Firstly, $\Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C}) \subseteq \Gamma^{SQ}(\mathcal{B} \cup \mathcal{C})$ needs to be proven. Since $\Gamma^{SQ}(\mathcal{B})$,$\cap\Gamma^{SQ}(\mathcal{C}) \neq \emptyset$, there is some $\vec{y} = \Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C})$. For any such $\vec{y}$ there exist $\vec{\alpha} = (\alpha_i, ... \alpha_n) \in \Gamma^{SQ}(\mathcal{B})$ and $\vec{\beta}= (\beta_i, ... , \beta_m) \in \Gamma^{SQ}(\mathcal{C})$. By Proposition 7, $f^*(\vec{y}^{SQ}_\mathcal{B})$ is the optimal value of problem (14), where $f(\vec{y}^{SQ}_\mathcal{B} ) = \sum^n_{i=1} d^{SQ}(a_i, y), \alpha_i \in mho(\mathcal{K}_i)$. $f^*(\vec{y}^{SQ}_\mathcal{C} )$ is the optimal value of problem (14), where $f (\vec{y}^{SQ}_\mathcal{C} ) = \sum^m_{i=1} d^{SQ}(\beta_i, y), \beta_i \in \mho(\mathcal{K}'_i), y \in \hat{\mathcal{P}} {\hat{\varepsilon}}$. It follows that $f^*(\vec{y}^{SQ} \mathcal{B} ) + f^*(\vec{y}^{SQ}_\mathcal{C} ) \le f^*(\vec{y}^{SQ}_{\mathcal{B}\cup\mathcal{C})}$ and the same $\vec{y}, \vec{\alpha}, \vec{\beta}$ globally minimize the sum $\sum^n_{i=1} d^{SQ}(a_i, y) +\sum^m_{i=1} d^{SQ}(\beta_i, y)$ subject to $\alpha_i \in \mho(\mathcal{K}_i), 1 \le i \le n$ and $\beta_i \in \mho(\mathcal{K}_i), 1 \le i \le m$. Thus $\vec{y} \in \Gamma^{SQ}(\mathcal{B} \cup \mathcal{C})$ and $f^*\vec{y}^{SQ}_\mathcal{B} + f^*\vec{y}^{SQ}_\mathcal{C} = f^*(\vec{y}^{SQ}_{\mathcal{B}\cup\mathcal{C}})$. Therefore, $\Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C}) \subseteq \Gamma^{SQ}(\mathcal{B} \cup \mathcal{C})$
 
-Secondly, $\Gamma^{SQ}(\mathcal{B} \cup \mathcal{C}) \subseteq \Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C})$ needs to be proven. Suppose $\vec{y} = (\alpha_i, ..., \alpha_n, \beta1, ..., \beta_m) \in \Gamma^{SQ}(\mathcal{B} \cup \mathcal{C})$. Then $f^∗(\vec{y}^{SQ}\mathcal{B}\cup\mathcal{C})=\sum^n_{i=1} d^{SQ} (\alpha_i, y) +\sum^m_{i=1} d^{SQ}(\beta_i, y)$ is the optimal value of optimization problem (14). Now assume that it does not exist $f^∗(\vec{y}^{SQ}\mathcal{B} ) = \sum^n_{i=1} d^{SQ}(\alpha_i, y)$ and $f^∗(\vec{y}^{SQ}\mathcal{C} ) = \sum^m_{i=1} d^{SQ}(\beta_i, y)$ then this would contradict the minimality of either $f^*(\vec{y}^{SQ}\mathcal{B} ) or f^*(\vec{y}^{SQ}\mathcal{C} ). Thus \vec{y} \in \Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C})$. Therefore, $\Gamma^{SQ}(\mathcal{B} \cup \mathcal{C}) \subseteq \Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C})$.
+Secondly, $\Gamma^{SQ}(\mathcal{B} \cup \mathcal{C}) \subseteq \Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C})$ needs to be proven. Suppose $\vec{y} = (\alpha_i, ..., \alpha_n, \beta1, ..., \beta_m) \in \Gamma^{SQ}(\mathcal{B} \cup \mathcal{C})$. Then $f^*(\vec{y}^{SQ}\mathcal{B}\cup\mathcal{C})=\sum^n_{i=1} d^{SQ} (\alpha_i, y) +\sum^m_{i=1} d^{SQ}(\beta_i, y)$ is the optimal value of optimization problem (14). Now assume that it does not exist $f^*(\vec{y}^{SQ}\mathcal{B} ) = \sum^n_{i=1} d^{SQ}(\alpha_i, y)$ and $f^*(\vec{y}^{SQ}\mathcal{C} ) = \sum^m_{i=1} d^{SQ}(\beta_i, y)$ then this would contradict the minimality of either $f^*(\vec{y}^{SQ}\mathcal{B} ) or f^*(\vec{y}^{SQ}\mathcal{C} ). Thus \vec{y} \in \Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C})$. Therefore, $\Gamma^{SQ}(\mathcal{B} \cup \mathcal{C}) \subseteq \Gamma^{SQ}(\mathcal{B}) \cap \Gamma^{SQ}(\mathcal{C})$.
 
 SDP. The proof for this property is similar to the proof for 4.1.5 in [23].
 
@@ -337,7 +329,7 @@ a constraint set. Suppose that $\mathcal{Y}$ is optimal for (16).
 Then there exists $\vec{y}^{RB}_\mathcal{B}$ such that $\mathcal{Y} = \sum^n_{i=1} d^{RB}(x_i, y)$
 and $y \in \vec{y}^{RB}_\mathcal{B} , \vec{y}^{RB}_\mathcal{B}$ is an optimal point. This leads to $\mathcal{C}$
 is nonempty and thus $\vec{y}^{RB}_\mathcal{B}$ is feasible and attains the
-optimal value $f^∗$ Therefore vector $\vec{y}^{RB}_\mathcal{B}$ is the optimal
+optimal value $f^*$ Therefore vector $\vec{y}^{RB}_\mathcal{B}$ is the optimal
 solutions of (16) [25].
 
 \textbf{Definition 16}. (RB Merging Operator). Function 
@@ -366,7 +358,7 @@ constraint set. Suppose that y is optimal for (18).
 Then there exists $\vec{y}^{SE}_\mathcal{B}$ such that $y = \sum^n_{i=1} d^{KL}(x_i, y)$
 and $y \in \vec{y}^{LE}_\mathcal{B} , \vec{y}^{LE}_\mathcal{B}$ is an optimal point. This leads to
 $C$ is nonempty and thus $\vec{y}^{LE}_\mathcal{B}$ is feasible and attains
-the optimal value $f^∗$. Therefore, vector $\vec{y}^{LE}_\mathcal{B}$ is the
+the optimal value $f^*$. Therefore, vector $\vec{y}^{LE}_\mathcal{B}$ is the
 optimal solutions of (18) [25].
 
 \textbf{Definition 17}. (LE Merging Operator). Function 
@@ -380,28 +372,28 @@ needs to be proven. Since $\Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C}
 there is some $\vec{y} \in \Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C})$. For any
 such $\vec{y}$ there exist $\vec{\alpha} = (\alpha_i, ... , \alpha_n) \in \Gamma^{LE}(\mathcal{B})$
 and $\vec{\beta} = (\beta_i, ... , \beta_m) \in \Gamma^{LE}(\mathcal{C})$ By Proposition,
-13 $f^∗(\vec{y}^{SE}_\mathcal{B} )$ is the optimal value of problem
+13 $f^*(\vec{y}^{SE}_\mathcal{B} )$ is the optimal value of problem
 (18) where $f (\vec{y}^{SE}_mathcal{B} ) = \sum^n_{i=1} d^{KL}(\alpha_i, y), \alpha_i \in \mho(\mathcal{K}_i)$;
-$f^∗(\vec{y}^{SE}_mathcal{C} )$ is the optimal value of problem (18),
+$f^*(\vec{y}^{SE}_mathcal{C} )$ is the optimal value of problem (18),
 where $f (\vec{y}^{SE}_mathcal{C} ) = \sum^m_{i=1} d^{KL}(\beta_i, y), \beta_i \in f(\mathcal{K}_i), y \in	
-\widehat{P}(\hat{\varepsilon})$. It follows that $f^∗(\vec{y}^{SE}_\mathcal{B} ) + f^∗(\vec{y}^{SE}_mathcal{C} ) \leq f^∗(\vec{y}^{SE}_mathcal{B}\cup\mathcal{C})$
+\widehat{P}(\hat{\varepsilon})$. It follows that $f^*(\vec{y}^{SE}_\mathcal{B} ) + f^*(\vec{y}^{SE}_mathcal{C} ) \leq f^*(\vec{y}^{SE}_mathcal{B}\cup\mathcal{C})$
 and the same $\vec{y}, \vec{\alpha}, \vec{\beta}$ globally minimize the sum $\sum^n_{i=1} d^{KL}(\alpha_i, y) +\sum^m_{i=1} d^{KL}(\beta_i, y) subject to \alpha_i \in
 \mho(\mathcal{K}_i), 1 \leq i \leq n$ and $\vec{\beta} \in \mho(\mathcal{K}_i), 1 \leq i \leq m$. Thus
-$\vec{y} \in \Gamma^{LE}(\mathcal{B} \cup \mathcal{C})$ and if $f^∗(\vec{y}^{SE}_mathcal{B} )$ and $f^∗(\vec{y}^{SE}_mathcal{C} )$ are not
+$\vec{y} \in \Gamma^{LE}(\mathcal{B} \cup \mathcal{C})$ and if $f^*(\vec{y}^{SE}_mathcal{B} )$ and $f^*(\vec{y}^{SE}_mathcal{C} )$ are not
 equal to $+\infty$ then 
 
-$f^∗(\vec{y}^{SE}_\mathcal{B} ) + f^∗(\vec{y}^{SE}_mathcal{C} ) = f^∗(\vec{y}^{SE}_mathcal{B}\cup\mathcal{C})$
+$f^*(\vec{y}^{SE}_\mathcal{B} ) + f^*(\vec{y}^{SE}_mathcal{C} ) = f^*(\vec{y}^{SE}_mathcal{B}\cup\mathcal{C})$
 
 Therefore, $\Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C}) \subseteq \Gamma^{LE}(\mathcal{B} \cup \mathcal{C})$. 
 
 Secondly, $\Gamma^{LE}(\mathcal{B} \cup \mathcal{C}) \subseteq \Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C})$ needs
 to be proven. Suppose $\vec{y} = (\alpha_i, ... , \alpha_n, \beta1, ... , \beta_m)
 \in \Gamma^{LE}(\mathcal{B} \cup \mathcal{C})$.
-Then $f^∗(\vec{y}^{SE}_\mathcal{B} \cup\mathcal{C}) = \sum^n_{i=1} d^{KL}(\alpha_i, y) + \sum^m{i=1} d^{KL}(\beta_i, y)$ is the optimal value of problem (18).
-Now assume that it does not exist $f^∗(\vec{y}^{SE}_mathcal{B} ) = \sum^n_{i=1} d^{KL}(\alpha_i, y) \neq +\infty$ and $f^∗(\vec{y}^{SE}_\mathcal{C} ) = \sum^m_{i=1}
+Then $f^*(\vec{y}^{SE}_\mathcal{B} \cup\mathcal{C}) = \sum^n_{i=1} d^{KL}(\alpha_i, y) + \sum^m{i=1} d^{KL}(\beta_i, y)$ is the optimal value of problem (18).
+Now assume that it does not exist $f^*(\vec{y}^{SE}_mathcal{B} ) = \sum^n_{i=1} d^{KL}(\alpha_i, y) \neq +\infty$ and $f^*(\vec{y}^{SE}_\mathcal{C} ) = \sum^m_{i=1}
 d^{KL}(\beta_i, y) \neq +\infty$ then this would contradict
-the minimality of either $f^∗(\vec{y}^SE_\mathcal{B})$ or
-$f^∗(\vec{y}^{SE}_mathcal{C} )$. Thus $\vec{y} \in \Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C})$. Therefore,
+the minimality of either $f^*(\vec{y}^SE_\mathcal{B})$ or
+$f^*(\vec{y}^{SE}_mathcal{C} )$. Thus $\vec{y} \in \Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C})$. Therefore,
 $\Gamma^{LE}(\mathcal{B} \cup \mathcal{C}) \subseteq \Gamma^{LE}(\mathcal{B}) \cap \Gamma^{LE}(\mathcal{C})$.
 The proof for remaining properties of $\Gamma^{LE}$ is similar to that of
 $\Gamma^{SQ}$ by using distance function $d^{SQ}(x, y)$
@@ -423,7 +415,7 @@ be a constraint set. Suppose that $\mathcal{Y}$ is optimal for
 where $x_i \in \mho(\mathcal{K}_i)$. Then there exists $\vec{y}^{SE}_mathcal{B}$ 
 such that $y = \sum^n_{i=1} d^{KL}(y, x_i)$ and $y \in \vec{y}^{SE}_mathcal{B} ,\vec{y}^{SE}_mathcal{B}$ is 
 an optimal point. This leads to C is nonempty and 
-thus $\vec{y}^{SE}_mathcal{B}$ is feasible and attains the optimal value $f^∗$. 
+thus $\vec{y}^{SE}_mathcal{B}$ is feasible and attains the optimal value $f^*$. 
 Therefore vector $\vec{y}^SE_\mathcal{B}$ is the optimal solutions of (20) 
 [25]. 
 
@@ -436,7 +428,7 @@ $\Gamma^{SE}(\mathcal{B}) = \vec{y}^{SE}_mathcal{B}$ .
 $\Gamma^{SE}$ fulfills CP1, SCP, IP, EP, CP2. 
 
 \textbf{Proof}. CP2. Since $\cap^m_{i=1}\mho(\mathcal{K}_i) \neq \emptyset$ it follows that 
-$f^∗(\vec{y}^{SE}_mathcal{C} ) = \sum^m_{i=1} d^{KL}(y, \beta_i) = 0 \neq +\infty$. It is sufficient 
+$f^*(\vec{y}^{SE}_mathcal{C} ) = \sum^m_{i=1} d^{KL}(y, \beta_i) = 0 \neq +\infty$. It is sufficient 
 to consider the case when $\sum^m_{i=1} d^{KL}(y, \alpha_j)$ 
 is $+\infty$. However, in this case both $\Gamma^{SE}(\mathcal{B} \cup \mathcal{C})$ and 
 $\Gamma^{SE}(\mathcal{B})$ are equal to $\hat{p}(\hat{\in})$. Therefore, $\Gamma^{SE}(\mathcal{B} \cup \mathcal{C}) = 
@@ -531,7 +523,7 @@ Proposition 2.
 %\Procedure{}{}
 \For {$i=1, h$}
   \For {$j=1, m$} 
-      \State $a_{ij} = \varphi(F_i \cap G_i,\Theta_j)(1 − \rho_i) − \varphi(\bar{F}_i \cap G_i,\Theta_j )\rho_i$
+      \State $a_{ij} = \varphi(F_i \cap G_i,\Theta_j)(1 - \rho_i) - \varphi(\bar{F}_i \cap G_i,\Theta_j )\rho_i$
   \EndFor
 \EndFor
 \State Solving problem (3) with constraints (4)-(5)
@@ -551,8 +543,8 @@ Proposition 2.
   \For {$j=1, 2h$}
     \If {$(i = j) and (i \leq h ) and (j \leq h )$}
       \State {$\bar{a}_{ij} = 1$}
-	\ElsIf {$(j − i = h ) and (j \leq 2h)$}
-	  \State {$\bar{a}_{ij} = −1$}
+	\ElsIf {$(j - i = h ) and (j \leq 2h)$}
+	  \State {$\bar{a}_{ij} = -1$}
 	\Else 
 	  \State {$\bar{a}_{ij} = 0$}
 	\EndIf
@@ -587,22 +579,22 @@ $f_i(x) \le 0, i \le 0, i = 1, ...,m;Q_x = b$ (25)
 One of these methods is the barrier method. Now assume that the problem is solvable. Let m be the number inequality constraints, $\mu = 1 + \frac{1}{\sqrt{m}}, \in$ be a 
 guaranteed specified accuracy, $c = \log_2 (\log_2 \frac{1}{\in})$.
 
-Let function $\Phi(X) = −\sum^m_{i=1} log(−fi(x))$ be the
+Let function $\Phi(X) = -\sum^m_{i=1} log(-fi(x))$ be the
 logarithmic barrier for (24). Therefore, the gradient
 and of $\Phi(X)$ are given by
 
-$\nabla \Phi(X) = \sum^m_{i=1} \frac{1}{−fi(x)} \nabla fi(X)$ (26)
+$\nabla \Phi(X) = \sum^m_{i=1} \frac{1}{-fi(x)} \nabla fi(X)$ (26)
 
 $t^{(0)}$ is the value that minimizes
 
 $\inf_g \parallel t\nabla f_0 \left( X^{(0)} \right) + \nabla \Phi \left( X^{(0)} \right) + Q^T g \parallel _2$ (27)
 
 The constant $\gamma$ depends on the backtracking
-parameters $\alpha$ and $\beta$, and is given by $\gamma =  \frac{\alpha\beta(1−2\alpha)}{20−8\alpha}$
+parameters $\alpha$ and $\beta$, and is given by $\gamma =  \frac{\alpha\beta(1-2\alpha)}{20-8\alpha}$
 
 The computational complexity of algorithm is
 $N = \frac{log \frac{m}{t^{(0)} \in}}{ \log\mu }
-\left( \frac{m(\mu − 1 − log\mu)}{\gamma} + c \right)$ (28)
+\left( \frac{m(\mu - 1 - log\mu)}{\gamma} + c \right)$ (28)
 
 The following propositions provide some assessments of the complexity of the algorithms.
 
@@ -633,13 +625,13 @@ $\mathcal{O}(|\Lambda(\hat{\varepsilon})| |\mathcal{K}|)$. In the second stage, 
 linear, computing $\vec{\vartheta}^p\_mathcal{K}$
 based on the interior-point algorithm
 proposed in [29]. By (24)–(25) and (5), it
-follows that $f_0(\vec{\vartheta}) = \parallel A_\mathcal{K}\vec{\vartheta}\parallel_p f_i(\vec{\vartheta}) = −\vartheta_i$ for $i =
+follows that $f_0(\vec{\vartheta}) = \parallel A_\mathcal{K}\vec{\vartheta}\parallel_p f_i(\vec{\vartheta}) = -\vartheta_i$ for $i =
 1, ... , |\Lambda(\hat{\varepsilon})|$, $Q = \underbrace{(1, ... , 1)}_{|\Lambda(\hat{\varepsilon})|}$. By (26) $\nabla \Phi \left( \vec{\vartheta} \right) = \sum^{|\Lambda(\hat{\varepsilon})|}_{i=1} \frac{1}{\vartheta_i}$
 and thus $t^{(0)}_{SM3}$ is the value that minimizes
 $\inf_g \parallel t \nabla f_0 \left( \vec{\vartheta}^{(0)} \right) +\nabla \Phi \left( \vec{\vartheta}^{(0)} \right)+  Q^T g \parallel _2$. By (28)
 and (1),
 
-$N_{SM3} = \frac{ \log^{\frac{|\Lambda(\hat{\varepsilon})|}{(0)}}_{\in t_{SM3}}}{\log\mu} \left( \frac{ |\Lambda(\hat{\varepsilon})| (\mu − 1 − \log\mu)}{\gamma} \right)$
+$N_{SM3} = \frac{ \log^{\frac{|\Lambda(\hat{\varepsilon})|}{(0)}}_{\in t_{SM3}}}{\log\mu} \left( \frac{ |\Lambda(\hat{\varepsilon})| (\mu - 1 - \log\mu)}{\gamma} \right)$
 
 and thus the cost for computing $\vec{\vartheta}^p_\mathcal{K}$ can be done
 in. $\mathcal{O}(N_{SM3})$ Therefore, the cost of the SM3 is
@@ -657,12 +649,12 @@ based on the interior-point algorithm
 proposed in [29]. By (24)–(25) and (9), it follows that
 $f_0\left(\vec{\vartheta}\right) = \sum^h_{i=1}(\ell_i + \zeta_i),Q = (1, ... , 1)$. 
 
-By (26), $\nabla \Phi \left( \vec{\vartheta} \right) = \sum^{3|\mathcal{K}|+|\Lambda(\hat{\varepsilon})|}_{i=1} \frac{1}{−f_i\left(\vec{\vartheta}\right)} \nabla f_i \left( \vec{\vartheta} \right)$
+By (26), $\nabla \Phi \left( \vec{\vartheta} \right) = \sum^{3|\mathcal{K}|+|\Lambda(\hat{\varepsilon})|}_{i=1} \frac{1}{-f_i\left(\vec{\vartheta}\right)} \nabla f_i \left( \vec{\vartheta} \right)$
 
 $t^{(0)}_{SM4}$ is the value that minimizes
 $\inf_g \parallel t\nabla f_0 \left( \vec{\vartheta}^(0) \right) + \nabla \Phi \left( \vec{\vartheta} \right) + Q^T g \parallel_2$
 
-$N_{SM3} = \frac{\log^{\frac{|\Lambda(\hat{\varepsilon})|}{(0)}}_{\in t_{SM4}}}{\log\mu} \left( \frac{ |\Lambda(\hat{\varepsilon})| (\mu − 1 − log\mu)}{\gamma} + c\right)$
+$N_{SM3} = \frac{\log^{\frac{|\Lambda(\hat{\varepsilon})|}{(0)}}_{\in t_{SM4}}}{\log\mu} \left( \frac{ |\Lambda(\hat{\varepsilon})| (\mu - 1 - log\mu)}{\gamma} + c\right)$
 
 Therefore, the cost is $\mathcal{O}(max\{2 |\mathcal{K}|^2 ,N_{SM4}\})$
 
@@ -695,7 +687,7 @@ Definition 13 is used
 \For $i=1 to n$
   \State $di \gets 0$
   \For $x_j \in \mho(\mathcal{K}_i)$
-    \State $d_i \gets d_i + (x_j − y_j)^2$
+    \State $d_i \gets d_i + (x_j - y_j)^2$
   \EndFor
 \EndFor
 \State $f \gets 0$
@@ -709,7 +701,7 @@ constraints (15)
 \end{algorithmic}
 \end{algorithm}
 
-$d_i \gets d_i + \left[ (x_j)^\gamma − (y_j)^\gamma − \gamma(x_j − y_j)(y_j)^{\gamma−1} \right]$
+$d_i \gets d_i + \left[ (x_j)^\gamma - (y_j)^\gamma - \gamma(x_j - y_j)(y_j)^{\gamma-1} \right]$
 
 and solve optimization problem (16) with objective function f and constraints (17). The RBMA originates from Proposition 
 9.
@@ -771,7 +763,7 @@ $\inf_g\parallel t\nabla f_0 \left( \vec{y}^{SQ^{(0)}}_\mathcal{B} \right) +\nab
 
 By (28) and (14),
 
-$N_{SQMA} =  \frac{ \log^{\frac{|\Lambda(\hat{\varepsilon})|}{(0)}}_{t_{SQMA} \in}}{log\mu}  \left( \frac{|\Lambda(\hat{\varepsilon})| (\mu − 1 − log\mu)}{\gamma} + c \right)$
+$N_{SQMA} =  \frac{ \log^{\frac{|\Lambda(\hat{\varepsilon})|}{(0)}}_{t_{SQMA} \in}}{log\mu}  \left( \frac{|\Lambda(\hat{\varepsilon})| (\mu - 1 - log\mu)}{\gamma} + c \right)$
 
 Therefore, the cost of the SQMA is
 
